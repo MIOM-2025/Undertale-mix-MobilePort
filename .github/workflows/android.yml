@@ -62,6 +62,17 @@ jobs:
           haxelib set flixel-addons git
           haxelib set flixel-animate git
           haxelib set hxdiscord_rpc git
+      # ========== 新增修复步骤 ==========
+      - name: Fix hscript compatibility (IMPORT_BLACKLIST -> DISALLOW_CUSTOM_CLASSES)
+        run: |
+          TARGET_FILE=".haxelib/hscript-improved/git/hscript/Interp.hx"
+          if [ -f "$TARGET_FILE" ]; then
+            sed -i 's/Config\.IMPORT_BLACKLIST/Config.DISALLOW_CUSTOM_CLASSES/g' "$TARGET_FILE"
+            echo "✅ Fixed $TARGET_FILE"
+          else
+            echo "⚠️ Warning: $TARGET_FILE not found, skipping fix"
+          fi
+      # ==================================
       - name: Building the game
         run: |
           haxelib run lime build android -final -D ONLY_ARM64
