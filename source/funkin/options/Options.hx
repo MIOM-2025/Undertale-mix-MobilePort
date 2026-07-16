@@ -220,6 +220,9 @@ class Options
 		__save.bind(name, path);
 		__load();
 
+		// 强制重置最后加载的模组为默认值（每次启动都覆盖存档中的值）
+		lastLoadedMod = "Undertale-mix";
+
 		if (!__eventAdded) {
 			Lib.application.onExit.add(function(i:Int) {
 				Logs.traceColored([
