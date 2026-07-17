@@ -17,11 +17,12 @@ import sys.io.Process;
 using StringTools;
 
 /** 
-* @Authors MaysLastPlay, ArkoseLabs, MarioMaster (MasterX-39), Dechis (dx7405)
-* @version: 0.4.0
-**/
+ * @Authors MaysLastPlay, ArkoseLabs, MarioMaster (MasterX-39), Dechis (dx7405)
+ * @version: 0.4.0
+ **/
 typedef CustomStorageModeData = { modes:Array<ModeData> }
 typedef ModeData = { Name:String, Folder:String }
+
 class MobileUtil
 {
 	#if sys
@@ -50,7 +51,6 @@ class MobileUtil
 						if (mode.Name == null || mode.Folder == null) continue;
 
 						if (doNotSeperate)
-							// Keeping the "Name|Folder" format, so initDirectory() doesn't break
 							ArrayReturn.push(mode.Name + "|" + mode.Folder);
 						else
 							ArrayReturn.push(mode.Name);
@@ -63,7 +63,6 @@ class MobileUtil
 		return ArrayReturn;
 	}
 
-	// always force path due to haxe
 	public static var currentDirectory:String;
 	public static function initDirectory():String {
 		var daPath:String = '';
@@ -72,7 +71,6 @@ class MobileUtil
 
 		var curStorageType:String = File.getContent(getStorageTypePath());
 
-		/* Put this there because I don't want to override original paths, also brokes the normal storage system */
 		for (line in getCustomStorageDirectories(true))
 		{
 			if (line.startsWith(curStorageType) && (line != '' || line != null)) {
@@ -81,21 +79,14 @@ class MobileUtil
 			}
 		}
 
-		/* Hardcoded Storage Types, these types cannot be changed by Custom Type
-		 * paths using "/sdcard/" location because otherwise engine crashes. -ArkoseLabs
-		 **/
 		switch(curStorageType) {
 			case 'EXTERNAL':
 				daPath = "/sdcard/.CodenameEngine";
-			/* obb doesnt work and I dont wanna fix it -ArkoseLabs
-			case 'EXTERNAL_OBB':
-				daPath = "/sdcard/Android/obb/com.yoshman29.codenameengine";
-			*/
 			case 'EXTERNAL_MEDIA':
 				daPath = "/sdcard/Android/media/com.yoshman29.codenameengine";
 			case 'EXTERNAL_DATA':
 				daPath = "/sdcard/Android/data/com.yoshman29.codenameengine/files";
-			default: //technically not needed but here for safety -ArkoseLabs
+			default:
 				if (daPath == null || daPath == '') daPath = "/sdcard/Android/data/com.yoshman29.codenameengine/files";
 		}
 		daPath = Path.addTrailingSlash(daPath);
@@ -110,7 +101,6 @@ class MobileUtil
 		{
 			Application.current.window.alert("Looks like you doesn't have directory named\n" + MobileUtil.getAssetDirectory() +
 			"\nBut maybe this couldn't be right, android loves to give errors like this\nPress OK & let's see what happens\nCurrent Error You Got:\n" + e, "Warning!");
-			//lime.system.System.exit(1);
 		}
 
 		try
@@ -122,15 +112,11 @@ class MobileUtil
 		{
 			Application.current.window.alert("Looks like you doesn't have directory named\n" + MobileUtil.getDirectory() + "mods/" + 
 			"\nBut maybe this couldn't be right, android loves to give errors like this\nPress OK & let's see what happens\nCurrent Error You Got:\n" + e, "Warning!");
-			//lime.system.System.exit(1);
 		}
 
 		return daPath;
 	}
 
-	/**
-	 * Requests Storage Permissions on Android Platform.
-	 */
 	public static function getPermissions():Void
 	{
 		if (AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU)
@@ -157,7 +143,6 @@ class MobileUtil
 
 	public static function chmod(permissions:Int, fullPath:String) {
 		var process = new Process('chmod -R ${permissions} ${fullPath}');
-
 		var exitCode = process.exitCode();
 		if (exitCode == 0) 
 			trace('Success: Permissions for the ${fullPath} file have been set to (${permissions})');
@@ -186,9 +171,6 @@ class MobileUtil
 		#end
 	}
 
-	/**
-	 * Saves a file to the external storage.
-	 */
 	public static function save(fileName:String = 'Ye', fileExt:String = '.txt', fileData:String = 'Nice try, but you failed, try again!', ?alert:Bool = true):Void
 	{
 		final folder:String = #if android MobileUtil.getDirectory() + #else Sys.getCwd() + #end 'saves/';
@@ -210,13 +192,28 @@ class MobileUtil
 	#end
 
 	/**
-	 * @param folders Optional list of specific folders (e.g. ["assets/data/"]). If null, copies all assets.
+	 * 复制资源文件到外部存储。
+	 * 
+	 * 默认行为（当 `folders` 为 `null` 时）：
+	 * - 仅复制 `assets/assets/` 和 `assets/mods/` 两个子目录下的所有文件。
+	 * - 若您想自定义复制的子目录，请传入 `folders` 数组（例如 `["assets/data/", "assets/images/"]`）。
+	 * 
+	 * @param folders 可选，指定需要复制的子目录列表（以 `assets/` 开头）。若为 `null`，则使用默认的两个目录。
+	 * @param onProgress 进度回调 (当前文件路径, 已完成数, 总数)
+	 * @param onComplete 完成回调
 	 */
 	public static function copyAssets(folders:Array<String> = null, onProgress:String->Int->Int->Void = null, onComplete:Void->Void = null):Void {
 		#if mobile
 		var rootTarget = getAssetDirectory();
 		try {
 			var assetList:Array<String> = Assets.list();
+
+			// ---------- 修改点开始 ----------
+			// 如果未指定 folders，则使用默认的两个目录
+			if (folders == null) {
+				folders = ["assets/assets/", "assets/mods/"];
+			}
+			// ---------- 修改点结束 ----------
 
 			var toCopy = assetList.filter(function(assetKey) {
 				var cleanPath = assetKey;
@@ -226,7 +223,6 @@ class MobileUtil
 				}
 
 				if (!StringTools.startsWith(cleanPath, "assets/")) return false;
-				if (folders == null) return true;
 
 				for (f in folders) {
 					if (StringTools.startsWith(cleanPath, f)) return true;
