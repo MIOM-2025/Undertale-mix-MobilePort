@@ -1,285 +1,248 @@
-package mobile.backend;
+package funkin.backend.system;
 
-import lime.system.System as LimeSystem;
-import haxe.io.Path;
-import haxe.Exception;
-
-import lime.system.System;
-import lime.app.Application;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.TransitionData;
+import flixel.graphics.FlxGraphic;
+import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
+import flixel.system.ui.FlxSoundTray;
+import funkin.backend.assets.AssetSource;
+import funkin.backend.assets.AssetsLibraryList;
+import funkin.backend.assets.ModsFolder;
+import funkin.backend.system.framerate.Framerate;
+import funkin.backend.system.framerate.SystemInfo;
+import funkin.backend.system.modules.*;
+import funkin.backend.utils.ThreadUtil;
+import funkin.editors.SaveWarning;
+import funkin.options.PlayerSettings;
 import openfl.Assets;
-import haxe.io.Bytes;
-#if sys
+import openfl.Lib;
+import openfl.display.Sprite;
+import openfl.text.TextFormat;
+import openfl.utils.AssetLibrary;
 import sys.FileSystem;
 import sys.io.File;
-import sys.io.Process;
+#if android
+import android.content.Context;
+import android.os.Build;
 #end
 
-using StringTools;
-
-/** 
- * @Authors MaysLastPlay, ArkoseLabs, MarioMaster (MasterX-39), Dechis (dx7405)
- * @version: 0.4.0
- **/
-typedef CustomStorageModeData = { modes:Array<ModeData> }
-typedef ModeData = { Name:String, Folder:String }
-
-class MobileUtil
+class Main extends Sprite
 {
-	#if sys
-	public static inline function getAssetDirectory():String
-		return #if android haxe.io.Path.addTrailingSlash("/sdcard/Android/data/com.yoshman29.codenameengine/files") #elseif ios lime.system.System.documentsDirectory #else Sys.getCwd() #end;
+	public static var instance:Main;
 
-	#if android
-	public static inline function getCustomStoragePath():String
-		return AndroidContext.getExternalFilesDir() + '/storageModes.json';
-	public static inline function getStorageTypePath():String
-		return AndroidContext.getExternalFilesDir() + '/storagetype.txt';
+	public static var modToLoad:String = null;
+	public static var forceGPUOnlyBitmapsOff:Bool = #if (desktop || mobile) false #else true #end;
+	public static var noTerminalColor:Bool = false;
+	public static var verbose:Bool = false;
 
-	public static function getCustomStorageDirectories(?doNotSeperate:Bool):Array<String>
-	{
-		var curJsonFile:String = getCustomStoragePath();
-		var ArrayReturn:Array<String> = [];
+	public static var scaleMode:FunkinRatioScaleMode;
+	public static var framerateSprite:Framerate;
 
-		if (FileSystem.exists(curJsonFile))
-		{
-			try {
-				var rawJson:String = File.getContent(curJsonFile);
-				var parsedData:CustomStorageModeData = haxe.Json.parse(rawJson);
+	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels).
+	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels).
+	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
+	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
-				if (parsedData.modes != null) {
-					for (mode in parsedData.modes) {
-						if (mode.Name == null || mode.Folder == null) continue;
-
-						if (doNotSeperate)
-							ArrayReturn.push(mode.Name + "|" + mode.Folder);
-						else
-							ArrayReturn.push(mode.Name);
-					}
-				}
-			} catch (e:haxe.Exception) {
-				trace("Error parsing storage JSON: " + e.message);
-			}
-		}
-		return ArrayReturn;
-	}
-
-	public static var currentDirectory:String;
-	public static function initDirectory():String {
-		var daPath:String = '';
-		if (!FileSystem.exists(getStorageTypePath()))
-			File.saveContent(getStorageTypePath(), Options.storageType);
-
-		var curStorageType:String = File.getContent(getStorageTypePath());
-
-		for (line in getCustomStorageDirectories(true))
-		{
-			if (line.startsWith(curStorageType) && (line != '' || line != null)) {
-				var dat = line.split("|");
-				daPath = dat[1];
-			}
-		}
-
-		switch(curStorageType) {
-			case 'EXTERNAL':
-				daPath = "/sdcard/.CodenameEngine";
-			case 'EXTERNAL_MEDIA':
-				daPath = "/sdcard/Android/media/com.yoshman29.codenameengine";
-			case 'EXTERNAL_DATA':
-				daPath = "/sdcard/Android/data/com.yoshman29.codenameengine/files";
-			default:
-				if (daPath == null || daPath == '') daPath = "/sdcard/Android/data/com.yoshman29.codenameengine/files";
-		}
-		daPath = Path.addTrailingSlash(daPath);
-		currentDirectory = daPath;
-
-		try
-		{
-			if (!FileSystem.exists(MobileUtil.getAssetDirectory()))
-				FileSystem.createDirectory(MobileUtil.getAssetDirectory());
-		}
-		catch (e:Dynamic)
-		{
-			Application.current.window.alert("Looks like you doesn't have directory named\n" + MobileUtil.getAssetDirectory() +
-			"\nBut maybe this couldn't be right, android loves to give errors like this\nPress OK & let's see what happens\nCurrent Error You Got:\n" + e, "Warning!");
-		}
-
-		try
-		{
-			if (!FileSystem.exists(MobileUtil.getDirectory() + "mods/"))
-				FileSystem.createDirectory(MobileUtil.getDirectory() + "mods/");
-		}
-		catch (e:Dynamic)
-		{
-			Application.current.window.alert("Looks like you doesn't have directory named\n" + MobileUtil.getDirectory() + "mods/" + 
-			"\nBut maybe this couldn't be right, android loves to give errors like this\nPress OK & let's see what happens\nCurrent Error You Got:\n" + e, "Warning!");
-		}
-
-		return daPath;
-	}
-
-	public static function getPermissions():Void
-	{
-		if (AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU)
-			AndroidPermissions.requestPermissions([
-				'READ_MEDIA_IMAGES',
-				'READ_MEDIA_VIDEO',
-				'READ_MEDIA_AUDIO',
-				'READ_MEDIA_VISUAL_USER_SELECTED'
-			]);
-		else
-			AndroidPermissions.requestPermissions(['READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']);
-
-		if (!AndroidEnvironment.isExternalStorageManager())
-			AndroidSettings.requestSetting('MANAGE_APP_ALL_FILES_ACCESS_PERMISSION');
-	}
-
-	public static var lastGettedPermission:Int;
-	public static function chmodPermission(fullPath:String) {
-		var process = new Process('stat -c %a ${fullPath}');
-		var stringOutput:String = process.stdout.readAll().toString();
-		process.close();
-		lastGettedPermission = Std.parseInt(stringOutput);
-	}
-
-	public static function chmod(permissions:Int, fullPath:String) {
-		var process = new Process('chmod -R ${permissions} ${fullPath}');
-		var exitCode = process.exitCode();
-		if (exitCode == 0) 
-			trace('Success: Permissions for the ${fullPath} file have been set to (${permissions})');
-		else
-		{
-			var errorOutput = process.stderr.readAll().toString();
-			trace('ERROR: Request to change permissions for the (${fullPath}) file failed. Exit Code: ${exitCode}, Error: ${errorOutput}');
-		}
-		process.close();
-	}
-	#end
-
-	public static function getDirectory():String
-	{
-		#if android	
-		var _currentDirectory = currentDirectory;
-		if (_currentDirectory == null || _currentDirectory == "") {
-    	    trace("currentDirectory is null, initializing again...");
-    	    _currentDirectory = initDirectory(); 
-    	}
-		return _currentDirectory;
-		#elseif ios
-		return LimeSystem.documentsDirectory;
-		#else
-		return Sys.getCwd();
-		#end
-	}
-
-	public static function save(fileName:String = 'Ye', fileExt:String = '.txt', fileData:String = 'Nice try, but you failed, try again!', ?alert:Bool = true):Void
-	{
-		final folder:String = #if android MobileUtil.getDirectory() + #else Sys.getCwd() + #end 'saves/';
-		try
-		{
-			if (!FileSystem.exists(folder))
-				FileSystem.createDirectory(folder);
-
-			File.saveContent('$folder/$fileName', fileData);
-			if (alert)
-				Application.current.window.alert('${fileName} has been saved.', "Success!");
-		}
-		catch (e:Dynamic)
-			if (alert)
-				Application.current.window.alert('${fileName} couldn\'t be saved.\n${e.message}', "Error!");
-			else
-				trace('$fileName couldn\'t be saved. (${e.message})');
-	}
-	#end
+	public static var game:FunkinGame;
 
 	/**
-	 * 复制资源文件到外部存储。
-	 * 
-	 * 默认行为（当 `folders` 为 `null` 时）：
-	 * - 仅复制 `assets/assets/` 和 `assets/mods/` 两个子目录下的所有文件。
-	 * - 若您想自定义复制的子目录，请传入 `folders` 数组（例如 `["assets/data/", "assets/images/"]`）。
-	 * 
-	 * @param folders 可选，指定需要复制的子目录列表（以 `assets/` 开头）。若为 `null`，则使用默认的两个目录。
-	 * @param onProgress 进度回调 (当前文件路径, 已完成数, 总数)
-	 * @param onComplete 完成回调
+	 * The time since the game was focused last time in seconds.
 	 */
-	public static function copyAssets(folders:Array<String> = null, onProgress:String->Int->Int->Void = null, onComplete:Void->Void = null):Void {
+	public static var timeSinceFocus(get, never):Float;
+	public static var time:Int = 0;
+
+	// You can pretty much ignore everything from here on - your code should go in your states.
+
+	public static function preInit() {
+		funkin.backend.utils.NativeAPI.registerAsDPICompatible();
+		funkin.backend.system.CommandLineHandler.parseCommandLine(Sys.args());
+		funkin.backend.system.Main.fixWorkingDirectory();
+	}
+
+	public function new()
+	{
+		super();
+
+		instance = this;
+
 		#if mobile
-		var rootTarget = getAssetDirectory();
-		try {
-			var assetList:Array<String> = Assets.list();
-
-			// ---------- 修改点开始 ----------
-			// 如果未指定 folders，则使用默认的两个目录
-			if (folders == null) {
-				folders = ["assets/assets/", "assets/mods/"];
-			}
-			// ---------- 修改点结束 ----------
-
-			var toCopy = assetList.filter(function(assetKey) {
-				var cleanPath = assetKey;
-				var colonIndex = cleanPath.indexOf(":");
-				if (colonIndex != -1) {
-					cleanPath = cleanPath.substring(colonIndex + 1);
-				}
-
-				if (!StringTools.startsWith(cleanPath, "assets/")) return false;
-
-				for (f in folders) {
-					if (StringTools.startsWith(cleanPath, f)) return true;
-				}
-				return false;
-			});
-
-			var total = toCopy.length;
-			if (total == 0) {
-				if (onComplete != null) onComplete();
-				return;
-			}
-
-			for (i in 0...total) {
-				var assetKey = toCopy[i];
-
-				var cleanPath = assetKey;
-				var colonIndex = cleanPath.indexOf(":");
-				if (colonIndex != -1) {
-					cleanPath = cleanPath.substring(colonIndex + 1);
-				}
-
-				var fullPath = Path.join([rootTarget, cleanPath]);
-
-				var directory = Path.directory(fullPath);
-				if (!FileSystem.exists(directory)) FileSystem.createDirectory(directory);
-
-				if (!FileSystem.exists(fullPath)) {
-					var bytes:Bytes = null;
-
-					try {
-						bytes = Assets.getBytes(assetKey);
-					} catch (e:Dynamic) {
-						try {
-							var text:String = Assets.getText(assetKey);
-							if (text != null) {
-								bytes = Bytes.ofString(text);
-							}
-						} catch (e2:Dynamic) {
-							trace('Failed to read text fallback for $assetKey: $e2');
-						}
-					}
-
-					if (bytes != null) {
-						File.saveBytes(fullPath, bytes);
-					} else {
-						trace('Could not extract data for asset: $assetKey');
-					}
-				}
-
-				if (onProgress != null) onProgress(cleanPath, i + 1, total);
-			}
-
-			if (onComplete != null) onComplete();
-		} catch (e:Dynamic) {
-			trace('Asset Copy Error: $e');
-		}
+		#if android
+		MobileUtil.getPermissions();
+		MobileUtil.initDirectory();
 		#end
+		Sys.setCwd(MobileUtil.getAssetDirectory());
+		//Sys.setCwd(haxe.io.Path.addTrailingSlash(MobileUtil.getDirectory()));
+		MobileUtil.copyAssets();
+		#end
+		CrashHandler.init();
+
+		#if !web framerateSprite = new Framerate(); #end
+
+		addChild(game = new FunkinGame(gameWidth, gameHeight, MainState, Options.framerate, Options.framerate, skipSplash, startFullscreen));
+
+		#if !web
+		addChild(framerateSprite);
+		SystemInfo.init();
+		#end
+		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
+	}
+
+	@:dox(hide)
+	public static var audioDisconnected:Bool = false;
+
+	public static var changeID:Int = 0;
+	public static var pathBack = #if (windows || linux)
+			"../../../../"
+		#elseif mac
+			"../../../../../../../"
+		#else
+			"../../../../"
+		#end;
+	public static var startedFromSource:Bool = #if TEST_BUILD true #else false #end;
+
+	// DEPRECATED
+	@:dox(hide) public static function execAsync(func:Void->Void) ThreadUtil.execAsync(func);
+
+	private static function getTimer():Int {
+		return time = Lib.getTimer();
+	}
+
+	public static function loadGameSettings() {
+		WindowUtils.init();
+		SaveWarning.init();
+		MemoryUtil.init();
+		@:privateAccess
+		FlxG.game.getTimer = getTimer;
+		FunkinCache.init();
+		Paths.assetsTree = new AssetsLibraryList();
+
+		#if UPDATE_CHECKING
+		funkin.backend.system.updating.UpdateUtil.init();
+		#end
+		ShaderResizeFix.init();
+		Logs.init();
+		Paths.init();
+
+		hscript.Interp.importRedirects = funkin.backend.scripting.Script.getDefaultImportRedirects();
+
+		#if GLOBAL_SCRIPT
+		funkin.backend.scripting.GlobalScript.init();
+		#end
+
+		var lib = new AssetLibrary();
+		@:privateAccess
+		lib.__proxy = Paths.assetsTree;
+		Assets.registerLibrary('default', lib);
+
+		funkin.options.PlayerSettings.init();
+		Options.load();
+
+		FlxG.fixedTimestep = false;
+
+		if (!funkin.backend.system.Controls.instance.mobileC) FlxG.scaleMode = scaleMode = new FunkinRatioScaleMode();
+
+		Conductor.init();
+		AudioSwitchFix.init();
+		EventManager.init();
+		FlxG.signals.focusGained.add(onFocus);
+		FlxG.signals.preStateSwitch.add(onStateSwitch);
+		FlxG.signals.postStateSwitch.add(onStateSwitchPost);
+		FlxG.signals.postUpdate.add(onUpdate);
+
+		FlxG.mouse.useSystemCursor = !Controls.instance.mobileC;
+		#if DARK_MODE_WINDOW
+		if(funkin.backend.utils.NativeAPI.hasVersion("Windows 10")) funkin.backend.utils.NativeAPI.redrawWindowHeader();
+		#end
+
+		ModsFolder.init();
+		#if MOD_SUPPORT
+		if (FileSystem.exists("mods/autoload.txt"))
+			modToLoad = File.getContent("mods/autoload.txt").trim();
+
+		ModsFolder.switchMod(modToLoad.getDefault(Options.lastLoadedMod));
+		#end
+
+		initTransition();
+	}
+
+	public static function refreshAssets() @:privateAccess {
+		FunkinCache.instance.clearSecondLayer();
+
+		var game = FlxG.game;
+		var daSndTray = Type.createInstance(game._customSoundTray = funkin.menus.ui.FunkinSoundTray, []);
+		var index:Int = game.numChildren - 1;
+
+		if(game.soundTray != null)
+		{
+			var newIndex:Int = game.getChildIndex(game.soundTray);
+			if(newIndex != -1) index = newIndex;
+			game.removeChild(game.soundTray);
+			game.soundTray.__cleanup();
+		}
+
+		game.addChildAt(game.soundTray = daSndTray, index);
+	}
+
+	public static function initTransition() {
+		var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
+		diamond.persist = true;
+		diamond.destroyOnNoUse = false;
+
+		FlxTransitionableState.defaultTransIn = new TransitionData(FADE, 0xFF000000, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+		FlxTransitionableState.defaultTransOut = new TransitionData(FADE, 0xFF000000, 0.7, new FlxPoint(0, 1),
+			{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+	}
+
+	public static function onFocus() {
+		_tickFocused = FlxG.game.ticks;
+	}
+
+	private static function onStateSwitch() {
+	  if (!funkin.backend.system.Controls.instance.mobileC)
+		scaleMode.resetSize();
+	}
+
+	public static function onUpdate() {
+		if (PlayerSettings.solo.controls.DEV_CONSOLE)
+			NativeAPI.allocConsole();
+
+		if (PlayerSettings.solo.controls.FPS_COUNTER)
+			Framerate.debugMode = (Framerate.debugMode + 1) % 3;
+	}
+
+	private static function onStateSwitchPost() {
+		// manual asset clearing since base openfl one does'nt clear lime one
+		// does'nt clear bitmaps since flixel fork does it auto
+
+		@:privateAccess {
+			// clear uint8 pools
+			for(length=>pool in openfl.display3D.utils.UInt8Buff._pools) {
+				for(b in pool.clear())
+					b.destroy();
+			}
+
+			openfl.display3D.utils.UInt8Buff._pools.clear();
+		}
+
+		MemoryUtil.clearMajor();
+	}
+
+	public static var noCwdFix:Bool = false;
+	public static function fixWorkingDirectory() {
+		#if windows
+		if (!noCwdFix && !sys.FileSystem.exists('manifest/default.json')) {
+			Sys.setCwd(haxe.io.Path.directory(Sys.programPath()));
+		}
+		#elseif switch
+		Sys.setCwd(haxe.io.Path.addTrailingSlash(openfl.filesystem.File.applicationStorageDirectory.nativePath));
+		#end
+	}
+
+	private static var _tickFocused:Float = 0;
+	public static function get_timeSinceFocus():Float {
+		return (FlxG.game.ticks - _tickFocused) / 1000;
 	}
 }
