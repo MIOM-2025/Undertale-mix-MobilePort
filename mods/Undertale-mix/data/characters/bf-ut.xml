@@ -1,0 +1,13 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="bf_undertale" antialiasing="false" flipX="true" camx="77" camy="90" isPlayer="true" icon="bf" color="#30B0D1">
+	<anim name="idle" anim="idle0" fps="8"/>
+	<anim name="singLEFT" anim="left0" fps="8"/>
+	<anim name="singDOWN" anim="down0" fps="8"/>
+	<anim name="singUP" anim="up0" fps="8"/>
+	<anim name="singRIGHT" anim="right0" fps="8"/>
+	<anim name="singLEFTmiss" anim="leftmiss0" x="-25" y="-25" fps="16"/>
+	<anim name="singDOWNmiss" anim="downmiss0" x="-25" y="-25" fps="16"/>
+	<anim name="singUPmiss" anim="upmiss0" x="-25" y="-25" fps="16"/>
+	<anim name="singRIGHTmiss" anim="rightmiss0" x="-25" y="-25" fps="16"/>
+	<anim name="hey" anim="hey0" x="-25" y="-25" fps="8"/>
+</character>

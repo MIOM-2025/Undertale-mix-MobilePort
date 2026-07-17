@@ -1,0 +1,12 @@
+<!DOCTYPE codename-engine-stage>
+<stage startCamPosX="463" startCamPosY="-190" folder="stages/options/" zoom="4" name="options">
+	<sprite antialiasing="false" x="10" sprite="secretdogroom" name="secret"/>
+	<sprite antialiasing="false" x="410" sprite="dogshrine" y="-270" name="shrine"/>
+	<boyfriend x="463" y="-190"/>
+	<dad x="460" y="-190"/>
+	<sprite antialiasing="false" x="458" interval="0" sprite="tubeguy" y="-228" type="beat" name="floaty">
+		<anim name = "danceLeft" anim = "tubeguy0" indices = "0,1" fps = "8"/>
+		<anim name = "danceRight" anim = "tubeguy0" indices = "2,3" fps = "8"/>
+	</sprite>
+	<girlfriend/>
+</stage>

@@ -1,0 +1,5 @@
+<stage zoom = "4" name = "snowdintilepuzzle" folder = "stages/snowdintilepuzzle/" startCamPosX = "559" startCamPosY = "-180">
+	<sprite name = "stages" x = "400" y = "-300" sprite = "stage_p" scroll = "1" antialiasing = "false"/>
+	<boyfriend x = "432" y = "-215"/>
+	<dad x = "610" y = "-234"/>
+</stage>

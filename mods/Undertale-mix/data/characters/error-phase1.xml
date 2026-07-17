@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="errorphase1" antialiasing="false" camx="-110" camy="80" icon="error" color="#FF0000">
+	<anim name="idle" anim="idle"/>
+	<anim name="singDOWN" anim="down"/>
+	<anim name="singRIGHT" anim="right"/>
+	<anim name="singLEFT" anim="left"/>
+	<anim name="singUP" anim="up"/>
+</character>

@@ -1,0 +1,6 @@
+<stage zoom = "5" name = "antivoid-new" folder = "stages/antivoid/" startCamPosX = "455" startCamPosY = "-102">
+	<boyfriend x = "960" y = "100"/>
+	<char name = "pico-stringedup" x = "867" y = "126"/>
+	<dad x = "849" y = "121"/>
+	<char name = "gf-stringedup" x = "809" y = "105"/>
+</stage>

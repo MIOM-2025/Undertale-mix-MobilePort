@@ -1,0 +1,9 @@
+<!DOCTYPE codename-engine-character>
+<character antialiasing="false" camx="-130" camy="91" icon="toby-hat" color="#FFFFFF">
+	<anim name="idle" anim="tonydog idle" x="-1" fps="8"/>
+	<anim name="singDOWN" anim="tonydog down" fps="8"/>
+	<anim name="singRIGHT" anim="tonydog right" fps="8"/>
+	<anim name="singLEFT" anim="tonydog left" fps="8"/>
+	<anim name="singUP" anim="tonydog up" fps="8"/>
+	<anim name="walk" anim="tonydog walk" fps="8"/>
+</character>

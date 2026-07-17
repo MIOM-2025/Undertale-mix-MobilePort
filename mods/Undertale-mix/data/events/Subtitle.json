@@ -1,0 +1,19 @@
+{ 
+	"params": [
+		{
+			"name": "Text",
+			"type": "String",
+			"defaultValue": ""
+		},
+		{
+			"name": "Color",
+			"type": "ColorWheel",
+			"defaultValue": "#FFFFFF"
+		},
+		{
+			"name": "Duration in Steps",
+			"type": "Int(0, 99999, 1)",
+			"defaultValue": "0"
+		}
+	] 
+}

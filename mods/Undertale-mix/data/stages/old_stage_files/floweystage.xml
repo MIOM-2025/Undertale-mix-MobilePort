@@ -1,0 +1,4 @@
+<!DOCTYPE codename-engine-stage>
+<stage folder="stages/" name="floweystage" zoom = "4">
+	<sprite type="none" sprite="floweyspot" name="bed" antialiasing = "false"/>
+</stage>

@@ -1,0 +1,123 @@
+import flixel.addons.display.FlxBackdrop;
+import funkin.savedata.FunkinSave;
+
+var bullet1:FlxBackdrop;
+var bullet2:FlxBackdrop;
+var overlay:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+function create() {
+	camGame.antialiasing = false;
+
+	overlay.visible = false;
+	overlay.setPosition(shrine.x, shrine.y);
+	add(overlay);
+	
+	// trace(FunkinSave.getSongHighscore('shrine', 'normal'));
+}
+//158,98
+var hidden:Bool = false;
+function battleStart() {
+	overlay.visible = true;
+}
+
+function battleStop() {
+	overlay.visible = false;
+}
+
+var middle = [412, 524, 636, 748];
+var originalValuesPlayer = [];
+var originalValuesOpponent = [];
+function strumChange() {
+	for (strumLine in strumLines.members) {
+		if (strumLine.opponentSide) {
+			for (note in strumLine.notes) {
+				note.alpha = (PlayState.opponentMode ? 1 : 0);
+			}
+		} else {
+			if (PlayState.opponentMode) {
+				for (note in strumLine.notes) {
+					note.visible = false;
+				}
+			}
+		}
+		for (strum in strumLine) {
+			if (strumLine.opponentSide) {
+				strum.alpha = (PlayState.opponentMode ? 1 : 0);
+				originalValuesOpponent.push(strum.x);
+			} else {
+				strum.visible = (PlayState.opponentMode ? false : true);
+				originalValuesPlayer.push(strum.x);
+			}
+			strum.x = middle[strum.ID];
+		}
+	}
+}
+
+function popUpAlert() {
+	if (FunkinSave.getSongHighscore('shrine', 'normal').date != null || !FlxG.save.data.shrine_mechanics_allowed) {
+		return;
+	}
+	
+	mechanicAlert([
+    'This song\'s mechanic consists of you\nswitching between two colors.',
+    'That\'s indicated by whatever\nside of BF is opaque.\n(That means not see through.)',
+    'Currently the key you use to\nswitch is [' + keyString + '].\n \nYou can change this in the options\ninside the keybinds category\nin the mod specific tab.\n \nIf you are on mobile, you can switch\nby pressing the black rectangle\nthat rises from the bottom.',
+    'Whatever side you\'re currently on means\nyou can only hit the notes from THAT color!',
+    'So if you\'re red, you can only hit red notes.\nIf you\'re blue you can only hit blue notes.',
+    'If you try to hit a note that\'s the opposite\ncolor than you\'re on, it will not register.\n \nNotes you can\'t currently hit are\ngoing to appear as transparent.',
+    'There will be an alert and timer\ntelling you when it\'s the most\noptimal time to switch.\n \nYou can switch early or not\njust keep that in mind.',
+    'I hope you got everything\nin your system, otherwise\nit\'s just trial and error!\n \nGoodbye and good luck!'
+]);
+}
+
+var audioList:Array<FlxSound> = [];
+function mechanicAlert(text:String) {
+	canPause = false;
+	bf.stunned = true;
+
+	
+	audioList.push(inst);
+	audioList.push(vocals);
+	for (strumLine in strumLines.members) {
+		audioList.push(strumLine.vocals);
+	}
+	
+	for (audio in audioList) {
+		FlxTween.num(audio.pitch, 0, 1, {ease: FlxEase.quadInOut}, (pitch) -> audio.pitch = pitch);
+	}
+	FlxTween.tween(dad, {x: dad.x}, 1, {onComplete: function() {
+		openSubState(new ModSubState('AlertPrompt', text));
+	}});
+}
+
+function onSubstateClose(e) {
+	// FlxG.save.data.seenShrineMechanicExplanation = true;
+	// FlxG.save.flush();
+	
+	for (audio in audioList) {
+		FlxTween.num(audio.pitch, 1, 1, {ease: FlxEase.quadInOut}, (pitch) -> audio.pitch = pitch);
+	}
+	canPause = true;
+	bf.stunned = false;
+}
+
+function strumNormal() {
+	for (strumLine in strumLines.members) {
+		if (strumLine.opponentSide) {
+			for (note in strumLine.notes) {
+				note.alpha = 1;
+			}
+			for (strum in strumLine) {
+				strum.x = originalValuesOpponent[strum.ID];
+				strum.alpha = 1;
+			}
+		} else {
+			for (strum in strumLine) {
+				strum.x = originalValuesPlayer[strum.ID];
+				strum.visible = true;
+			}
+			for (note in strumLine.notes) {
+				note.visible = true; 
+			}
+		}
+	}
+}

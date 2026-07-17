@@ -1,0 +1,7 @@
+<!DOCTYPE codename-engine-stage>
+<stage folder="stages/flowerbed/" name="flowerbed" zoom = "4">
+	<sprite type="none" sprite="flowerbed" name="bed" antialiasing = "false"/>
+	<girlfriend/>
+	<dad x = "44" y = "24"/>
+	<boyfriend x = "130" y = "23"/>
+</stage>

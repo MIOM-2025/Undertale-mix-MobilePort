@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="checkbox.png">
+<SubTexture name="checkbox check0000" x="18" y="24" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox check0001" x="47" y="0" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox check0002" x="47" y="18" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox check0003" x="0" y="43" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox check0004" x="0" y="0" width="25" height="24" frameX="0" frameY="0" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox check0005" x="25" y="0" width="22" height="23" frameX="-1" frameY="-1" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox uncheck0000" x="25" y="0" width="22" height="23" frameX="-1" frameY="-1" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox uncheck0001" x="0" y="24" width="18" height="19" frameX="-3" frameY="-3" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox uncheck0002" x="0" y="43" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox uncheck0003" x="47" y="18" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox uncheck0004" x="18" y="43" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+<SubTexture name="checkbox uncheck0005" x="18" y="24" width="18" height="18" frameX="-3" frameY="-4" frameWidth="25" frameHeight="24" />
+</TextureAtlas>

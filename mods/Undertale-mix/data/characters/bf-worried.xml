@@ -1,0 +1,12 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="bfworried" antialiasing="false" flipX="true" camx="77" camy="90" isPlayer="true" icon="bf" color="#30B0D1">
+	<anim name="idle" anim="idle" fps="8"/>
+	<anim name="singDOWN" anim="down0" fps="8"/>
+	<anim name="singRIGHT" anim="right0" fps="8"/>
+	<anim name="singLEFT" anim="left0" fps="8"/>
+	<anim name="singUP" anim="up0" fps="8"/>
+	<anim name="singUPmiss" anim="upmiss0" fps="8"/>
+	<anim name="singDOWNmiss" anim="downmiss0" fps="8"/>
+	<anim name="singRIGHTmiss" anim="rightmiss0" fps="8"/>
+	<anim name="singLEFTmiss" anim="leftmiss0" fps="8"/>
+</character>

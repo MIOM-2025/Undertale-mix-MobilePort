@@ -1,0 +1,43 @@
+{ "frames": {
+   "quit0000": {
+    "frame": { "x": 90, "y": 0, "w": 41, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 41, "h": 7 },
+    "sourceSize": { "w": 47, "h": 7 },
+    "duration": 100
+   },
+   "quit0001": {
+    "frame": { "x": 46, "y": 0, "w": 43, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 43, "h": 7 },
+    "sourceSize": { "w": 47, "h": 7 },
+    "duration": 100
+   },
+   "quit0002": {
+    "frame": { "x": 0, "y": 0, "w": 45, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 45, "h": 7 },
+    "sourceSize": { "w": 47, "h": 7 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.13-dev",
+  "image": "quitting.png",
+  "format": "RGBA8888",
+  "size": { "w": 131, "h": 7 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "quit", "from": 0, "to": 2, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

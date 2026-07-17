@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="bf_death.png" width="79" height="99">
+	<SubTexture name="death0000" x="0" y="0" width="46" height="33" frameX="-15" frameY="-18" frameWidth="70" frameHeight="70"/>
+	<SubTexture name="death0001" x="0" y="34" width="46" height="32" frameX="-15" frameY="-19" frameWidth="70" frameHeight="70"/>
+	<SubTexture name="death0002" x="0" y="67" width="46" height="32" frameX="-15" frameY="-19" frameWidth="70" frameHeight="70"/>
+	<SubTexture name="death0003" x="47" y="0" width="32" height="32" frameX="-20" frameY="-19" frameWidth="70" frameHeight="70"/>
+	<SubTexture name="twitch0000" x="47" y="33" width="32" height="32" frameX="-20" frameY="-19" frameWidth="70" frameHeight="70"/>
+	<SubTexture name="twitch0001" x="47" y="0" width="32" height="32" frameX="-20" frameY="-19" frameWidth="70" frameHeight="70"/>
+</TextureAtlas>

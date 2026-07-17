@@ -1,0 +1,17 @@
+{
+	"customValues": {
+		"deathTheme": "yousuck"
+	},
+	"color": "#000000",
+	"opponentModeAllowed": false,
+	"difficulties": [
+		"normal"
+	],
+	"icon": "face",
+	"coopAllowed": false,
+	"stepsPerBeat": 4,
+	"displayName": "shrine",
+	"needsVoices": true,
+	"beatsPerMeasure": 4,
+	"bpm": 110
+}

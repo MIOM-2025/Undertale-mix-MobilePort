@@ -1,0 +1,8 @@
+<stage zoom = "3.8" name = "waterfall" folder = "stages/waterfall/" startCamPosX = "600" startCamPosY = "-100">
+	<sprite name = "bg" x = "-100" y = "-200" sprite = "debug_room" scroll = "1" antialiasing = "false"/>
+	<solid name = "puddlebg" color = "#000000" x = "100" y = "-80" width = "1300" height = "60" scroll = "1"/>
+	<sprite name = "puddle" x = "100" y = "-80" sprite = "puddlebutbetter" scroll = "1" antialiasing = "false"/>
+	<sprite name = "bgbottom" x = "-100" y = "-20" sprite = "debug_room_bottom" scroll = "1" antialiasing = "false"/>
+	<boyfriend x = "626" y = "-112"/>
+	<dad x = "522" y = "-110"/>
+</stage>

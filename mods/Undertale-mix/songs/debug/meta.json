@@ -1,0 +1,22 @@
+{
+	"customValues": {
+		"deathTheme": "reflection",
+		"opponentIcons": "frisk",
+		"opponentColors": "8F08F8",
+		"playerIcons": "bf"
+	},
+	"color": "#000000",
+	"opponentModeAllowed": true,
+	"icon": "Icon",
+	"difficulties": [
+		"normal",
+		"difficulty",
+		"harder"
+	],
+	"coopAllowed": true,
+	"stepsPerBeat": 4,
+	"displayName": "Debug",
+	"beatsPerMeasure": 4,
+	"needsVoices": true,
+	"bpm": 140
+}

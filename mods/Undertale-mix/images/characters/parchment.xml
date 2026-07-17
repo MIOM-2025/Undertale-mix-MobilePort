@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="parchment.png" width="295" height="288">
+	<SubTexture name="down0000" x="247" y="0" width="29" height="33" frameX="-27" frameY="-49" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="down0001" x="215" y="218" width="28" height="36" frameX="-27" frameY="-46" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0000" x="108" y="91" width="31" height="39" frameX="-26" frameY="-42" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0001" x="179" y="177" width="41" height="27" rotated="true" frameX="-28" frameY="-40" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0002" x="28" y="174" width="42" height="27" rotated="true" frameX="-28" frameY="-39" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0003" x="140" y="86" width="27" height="43" frameX="-28" frameY="-38" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="left0000" x="195" y="43" width="26" height="42" frameX="-28" frameY="-39" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="left0001" x="43" y="231" width="42" height="24" rotated="true" frameX="-30" frameY="-39" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="right0000" x="41" y="0" width="39" height="42" frameX="-27" frameY="-39" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="right0001" x="41" y="43" width="37" height="42" frameX="-26" frameY="-39" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="up0000" x="143" y="207" width="46" height="23" rotated="true" frameX="-32" frameY="-35" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="up0001" x="130" y="231" width="42" height="23" rotated="true" frameX="-32" frameY="-39" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="anim0000" x="0" y="135" width="27" height="43" frameX="-0" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0001" x="168" y="0" width="26" height="42" frameX="-1" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0002" x="195" y="0" width="26" height="42" frameX="-1" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0003" x="0" y="227" width="42" height="24" rotated="true" frameX="-2" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0004" x="246" y="173" width="22" height="41" frameX="-4" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0005" x="173" y="249" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0006" x="173" y="249" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0007" x="173" y="249" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0008" x="215" y="260" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0009" x="86" y="255" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0010" x="248" y="34" width="22" height="41" frameX="-4" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0011" x="43" y="256" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0012" x="215" y="260" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0013" x="241" y="130" width="22" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0014" x="215" y="260" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0015" x="86" y="255" width="41" height="21" rotated="true" frameX="-5" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0016" x="168" y="86" width="26" height="43" frameX="-1" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0017" x="0" y="48" width="32" height="41" frameX="-8" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0018" x="79" y="95" width="26" height="46" frameX="-3" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0019" x="71" y="185" width="24" height="45" frameX="-4" frameY="-2" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0020" x="165" y="130" width="25" height="46" frameX="-3" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0021" x="96" y="207" width="46" height="23" rotated="true" frameX="-4" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0022" x="96" y="207" width="46" height="23" rotated="true" frameX="-4" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0023" x="191" y="130" width="24" height="46" frameX="-4" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0024" x="0" y="179" width="24" height="45" frameX="-5" frameY="-2" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0025" x="25" y="202" width="43" height="24" rotated="true" frameX="-6" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0026" x="25" y="202" width="43" height="24" rotated="true" frameX="-6" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0027" x="216" y="130" width="24" height="43" frameX="-6" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0028" x="221" y="86" width="24" height="43" frameX="-6" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0029" x="244" y="218" width="23" height="41" frameX="-8" frameY="-6" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0030" x="99" y="175" width="39" height="29" rotated="true" frameX="-10" frameY="-8" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0031" x="139" y="177" width="39" height="29" rotated="true" frameX="-10" frameY="-8" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0032" x="222" y="44" width="25" height="40" frameX="-10" frameY="-7" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0033" x="0" y="252" width="42" height="21" rotated="true" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0034" x="128" y="255" width="42" height="20" rotated="true" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0035" x="277" y="0" width="18" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0036" x="277" y="0" width="18" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0037" x="277" y="0" width="18" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0038" x="264" y="129" width="19" height="42" frameX="-9" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0039" x="268" y="76" width="19" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0040" x="268" y="215" width="18" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0041" x="268" y="215" width="18" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0042" x="268" y="215" width="18" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0043" x="269" y="172" width="18" height="42" frameX="-10" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0044" x="171" y="271" width="43" height="17" rotated="true" frameX="-10" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0045" x="246" y="85" width="21" height="43" frameX="-7" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0046" x="86" y="231" width="43" height="23" rotated="true" frameX="-6" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0047" x="221" y="174" width="24" height="43" frameX="-5" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0048" x="195" y="86" width="25" height="43" frameX="-4" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0049" x="195" y="86" width="25" height="43" frameX="-4" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0050" x="222" y="0" width="24" height="43" frameX="-5" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0051" x="190" y="205" width="24" height="43" frameX="-5" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0052" x="190" y="205" width="24" height="43" frameX="-5" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0053" x="190" y="205" width="24" height="43" frameX="-5" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0054" x="137" y="131" width="27" height="43" frameX="-4" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0055" x="137" y="131" width="27" height="43" frameX="-4" frameY="-4" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0056" x="140" y="0" width="27" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0057" x="167" y="43" width="27" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0058" x="28" y="115" width="42" height="28" rotated="true" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0059" x="138" y="43" width="28" height="42" frameX="-3" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0060" x="108" y="48" width="29" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0061" x="71" y="142" width="27" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0062" x="28" y="115" width="42" height="28" rotated="true" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0063" x="138" y="43" width="28" height="42" frameX="-3" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0064" x="108" y="48" width="29" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0065" x="71" y="142" width="27" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0066" x="138" y="43" width="28" height="42" frameX="-3" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0067" x="108" y="48" width="29" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0068" x="71" y="142" width="27" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0069" x="106" y="131" width="30" height="39" frameX="-4" frameY="-8" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0070" x="28" y="144" width="40" height="29" rotated="true" frameX="-4" frameY="-7" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0071" x="110" y="0" width="29" height="42" frameX="-4" frameY="-5" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0072" x="81" y="0" width="28" height="47" frameX="-3" frameY="-0" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0073" x="33" y="86" width="45" height="28" rotated="true" frameX="-4" frameY="-2" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0074" x="79" y="48" width="28" height="46" frameX="-2" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0075" x="0" y="90" width="27" height="44" frameX="-5" frameY="-3" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0076" x="81" y="0" width="28" height="47" frameX="-3" frameY="-0" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0077" x="33" y="86" width="45" height="28" rotated="true" frameX="-4" frameY="-2" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0078" x="79" y="48" width="28" height="46" frameX="-2" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0079" x="0" y="90" width="27" height="44" frameX="-5" frameY="-3" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0080" x="81" y="0" width="28" height="47" frameX="-3" frameY="-0" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0081" x="33" y="86" width="45" height="28" rotated="true" frameX="-4" frameY="-2" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0082" x="79" y="48" width="28" height="46" frameX="-2" frameY="-1" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0083" x="0" y="90" width="27" height="44" frameX="-5" frameY="-3" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0084" x="81" y="0" width="28" height="47" frameX="-3" frameY="-0" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0085" x="0" y="90" width="27" height="44" frameX="-5" frameY="-3" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0086" x="0" y="0" width="40" height="47" frameX="-0" frameY="-0" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0087" x="0" y="0" width="40" height="47" frameX="-0" frameY="-0" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0088" x="0" y="0" width="40" height="47" frameX="-0" frameY="-0" frameWidth="40" frameHeight="47"/>
+	<SubTexture name="anim0089" x="0" y="0" width="40" height="47" frameX="-0" frameY="-0" frameWidth="40" frameHeight="47"/>
+</TextureAtlas>

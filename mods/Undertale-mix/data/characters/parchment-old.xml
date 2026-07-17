@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="parchment_old" antialiasing="false" icon="parchment-old" color="#E6A4CC">
+	<anim name="idle" anim="idle0" x="0" y="0" fps="8" loop="false"/>
+	<anim name="singLEFT" anim="left" x="0" y="0" fps="8" loop="false"/>
+	<anim name="singDOWN" anim="down0" x="0" y="0" fps="8" loop="false"/>
+	<anim name="singUP" anim="up0" x="0" y="0" fps="8" loop="false"/>
+	<anim name="singRIGHT" anim="right0" x="0" y="0" fps="8" loop="false"/>
+</character>

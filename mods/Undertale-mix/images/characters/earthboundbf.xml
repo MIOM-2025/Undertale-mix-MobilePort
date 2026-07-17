@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="earthboundbf.png" width="97" height="103">
+	<SubTexture name="down0000" x="78" y="0" width="18" height="24" frameX="-3" frameY="-4" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="down0001" x="78" y="25" width="18" height="24" frameX="-3" frameY="-3" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="down0002" x="0" y="28" width="18" height="25" frameX="-3" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="idle0000" x="0" y="80" width="21" height="23" frameX="-0" frameY="-4" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="idle0001" x="77" y="50" width="20" height="24" frameX="-1" frameY="-3" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="idle0002" x="77" y="75" width="20" height="24" frameX="-1" frameY="-3" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="idle0003" x="38" y="0" width="20" height="25" frameX="-1" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="left0000" x="38" y="26" width="18" height="25" frameX="-0" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="left0001" x="0" y="54" width="18" height="25" frameX="-1" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="left0002" x="19" y="53" width="18" height="25" frameX="-3" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="right0000" x="38" y="52" width="19" height="25" frameX="-5" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="right0001" x="57" y="26" width="19" height="25" frameX="-3" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="right0002" x="59" y="0" width="18" height="25" frameX="-3" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="up0000" x="0" y="0" width="18" height="27" frameX="-3" frameY="-0" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="up0001" x="19" y="0" width="18" height="26" frameX="-3" frameY="-1" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="up0002" x="58" y="52" width="18" height="25" frameX="-3" frameY="-2" frameWidth="24" frameHeight="28"/>
+	<SubTexture name="death0000" x="19" y="27" width="18" height="25" frameX="-0" frameY="-0" frameWidth="18" frameHeight="25"/>
+</TextureAtlas>

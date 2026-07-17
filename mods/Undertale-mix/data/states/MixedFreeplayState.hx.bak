@@ -1,0 +1,1282 @@
+import UndertaleText;
+import haxe.Json;
+import funkin.savedata.FunkinSave;
+import funkin.backend.utils.DiscordUtil;
+import Reflect;
+import flixel.text.FlxText.FlxTextBorderStyle;
+import flixel.util.FlxColor;
+import flixel.math.FlxMath;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.FlxCamera;
+import flixel.group.FlxGroup;
+import flixel.system.FlxSound;
+import flixel.util.FlxTimer;
+
+var background:FlxSprite;
+var dithers:Array<FlxSprite> = [];
+
+var loadedWeeks:Array<Dynamic> = [];
+
+var week:UndertaleText;
+var songTexts:Array<UndertaleText> = [];
+var extraTexts:Array<UndertaleText> = [];
+var boxItems:Array<Dynamic> = [];
+
+var longAssLine:FlxSprite;
+var checkingBox:Bool = false;
+var box:FlxSprite = new FlxSprite().loadGraphic(Paths.image('freeplay/box'));
+var boxBg:FlxSprite;
+var boxTitle:UndertaleText;
+var scoreText:UndertaleText;
+var score:UndertaleText;
+var accuraryText:UndertaleText;
+var accuracy:UndertaleText;
+var rankText:UndertaleText;
+var rank:UndertaleText;
+var mechanics:UndertaleText;      // 主标签
+var checkbox:FlxSprite;           // 复选框
+var variation:UndertaleText;
+var render:FlxSprite;
+var tip:UndertaleText = new UndertaleText(0, 0, 'press [ctrl] to open gameplay modifers menu.', 'left', FlxG.width, 2.5, 'FFFFFF', 'crypt');
+var tipBG:FlxSprite;
+
+// ---------- 摄像机 ----------
+var uiCamera:FlxCamera;
+// 一级按钮（左上）
+var exitBtn:FlxSprite;      
+// 二级按钮（卡片内及左下）
+var startBtn:FlxSprite;     
+var startBtnBg:FlxSprite;   
+var settingsSubBtn:FlxSprite; 
+var exitSubBtn:FlxSprite;   // 使用原版退出图标（backspace）
+// 警告专用
+var warnExitBtn:FlxSprite;  // 警告退出按钮（左下角）
+var skipText:UndertaleText; // 剩余点击次数文本（放置在底部）
+var warnBg:FlxSprite;       // 警告背景
+var warnTitle:UndertaleText;
+var warnInfo:UndertaleText;
+var warningStuff:Array<Dynamic> = [];
+var createdWarningStuff:Bool = false;
+var skipClicksRemaining:Int = 3;
+var skipTimer:Float = 0;
+var skipPhase:Int = 0;      // 0:正常显示, 1:淡出中, -1:完全隐藏
+var skipAlpha:Float = 1;
+
+var transition:Bool = true;
+var camera:FlxCamera = new FlxCamera();
+var songCamera:FlxCamera = new FlxCamera(560, 81, 720, 639);
+var infoCamera:FlxCamera = new FlxCamera();
+var infoCamCover:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+
+var camZoom:Float = 4.0;
+var transitionTime:Float = 0.25;
+
+var currentCategory:Int = 0;
+var currentSelection:Int = 0;
+
+var themeVolume:Float = 1;
+var theme:FlxSound;
+var previewTheme:FlxSound;
+var oppMode:Bool = false;
+
+// ========== 键盘/触摸模式管理 ==========
+var inputMode:String = "keyboard";
+var hoveredObject:UndertaleText = null;
+var touchSelectedID:Int = -1;
+var selectedButton:Int = -1; // 二级菜单键盘导航：0-开始，1-设置，2-机制
+
+// 开始游戏淡出遮罩（放在最顶层）
+var fadeOutCover:FlxSprite;
+
+// ★★★ 锁对象：用于与调试菜单通信 ★★★
+var lockObj:Dynamic = { isSS: false };
+
+// ★★★ 存储灰色水平线 ★★★
+var lines:Array<FlxSprite> = [];
+
+// ★★★ 开始游戏过渡标志 ★★★
+var startingGame:Bool = false;
+
+// ★★★ 统一高亮机制组 ★★★
+function setMechanicsHighlight(highlight:Bool) {
+    if (mechanics != null) mechanics.color = highlight ? FlxColor.YELLOW : FlxColor.WHITE;
+    if (checkbox != null) checkbox.color = highlight ? FlxColor.YELLOW : FlxColor.WHITE;
+}
+
+function create() {
+	FlxG.cameras.add(camera, false);
+	camera.bgColor = FlxColor.TRANSPARENT;
+	camera.antialiasing = false;
+	camera.zoom = camZoom;
+	this.cameras = [camera];
+	
+	themeVolume = Options.volumeMusic;
+	theme = FlxG.sound.load(Paths.music('menuthemes/freeplay'), themeVolume, true);
+	theme.play();
+	theme.volume = 0;
+	FlxG.sound.defaultMusicGroup.add(theme);
+	previewTheme = FlxG.sound.load(Paths.music('freeplaypreviews/true-reset'), themeVolume, true);
+	previewTheme.play();
+	previewTheme.volume = 0;
+	FlxG.sound.defaultMusicGroup.add(previewTheme);
+	
+	background = new FlxSprite(419).loadGraphic(Paths.image('freeplay/bgs/flowerbed'));
+	background.screenCenter(FlxAxes.Y);
+	add(background);
+	
+	for (i in 0...3) {
+		var dither:FlxSprite = new FlxSprite((background.x + background.width) - 119).loadGraphic(Paths.image('freeplay/fadedither'));
+		dither.x += (15 * i);
+		dither.alpha = 0.8;
+		add(dither);
+		
+		var bg:FlxSprite = new FlxSprite(dither.x + dither.width).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg.alpha = 0.8;
+		add(bg);
+		
+		dithers.push([dither, bg]);
+	}
+	
+	FlxG.cameras.add(songCamera, false);
+	songCamera.bgColor = FlxColor.BLACK;
+	songCamera.antialiasing = false;
+	songCamera.zoom = 4.0;
+	
+	FlxG.cameras.add(infoCamera, false);
+	infoCamera.bgColor = FlxColor.TRANSPARENT;
+	
+	uiCamera = new FlxCamera();
+	uiCamera.bgColor = FlxColor.TRANSPARENT;
+	uiCamera.zoom = 1;
+	uiCamera.antialiasing = false;
+	FlxG.cameras.add(uiCamera, false);
+	
+	longAssLine = new FlxSprite(background.x + 200, background.y).makeGraphic(1, FlxG.height, FlxColor.WHITE);
+	longAssLine.alpha = 0.5;
+	add(longAssLine);
+	
+	// ---- 创建灰色水平线并存入 lines 数组 ----
+	for (i in 0...14) {
+		var line:FlxSprite = new FlxSprite(258, 239.5 + (20 * i)).makeGraphic(200, 1, FlxColor.WHITE);
+		line.alpha = 0.5;
+		line.cameras = [songCamera];
+		add(line);
+		lines.push(line);
+	}
+	
+	week = new UndertaleText(71, background.y + 5, '< Week Name >', 'center', FlxG.width, 0.5, 'FFFFFF', 'wonder');
+	week.alpha = 0.5;
+	add(week);
+	
+	tip.autoSize = true;
+	tip.updateHitbox();
+	tip.screenCenter(FlxAxes.X);
+	tip.setPosition(6, (FlxG.height - tip.height) + 3);
+	tip.cameras = [infoCamera];
+	tipBG = new FlxSprite(tip.x - 10, tip.y - 5).makeGraphic(tip.width, tip.height * 1.1, FlxColor.BLACK);
+	tipBG.alpha = 0.5;
+	tipBG.cameras = [infoCamera];
+	add(tipBG);
+	add(tip);
+	
+	infoCamCover.cameras = [infoCamera];
+	infoCamCover.alpha = 0;
+	add(infoCamCover);
+	
+	generateBox();
+	boxVisibility(false);
+	
+	// ---------- 创建按钮 ----------
+	// 一级退出按钮（左上），使用 pause/exit 缩放 1.6
+	exitBtn = createButton('exit', 1.6);
+	exitBtn.setPosition(10, 10);
+	exitBtn.cameras = [uiCamera];
+	add(exitBtn);
+	
+	// 开始按钮（卡片右下），缩放 1.6
+	startBtn = createButton('resume', 1.6);
+	startBtn.cameras = [uiCamera];
+	startBtn.visible = false;
+	add(startBtn);
+	
+	startBtnBg = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
+	startBtnBg.cameras = [uiCamera];
+	startBtnBg.visible = false;
+	startBtnBg.alpha = 0;
+	add(startBtnBg);
+	
+	// 二级设置按钮（卡片内），缩放 1.6
+	settingsSubBtn = createButton('settings', 1.6);
+	settingsSubBtn.cameras = [uiCamera];
+	settingsSubBtn.visible = false;
+	add(settingsSubBtn);
+	
+	// ***** 二级退出按钮（左下），使用原版 backspace 图标，缩放 4.0 *****
+	exitSubBtn = new FlxSprite().loadGraphic(Paths.image('freeplay/backspace'));
+	exitSubBtn.scale.set(4.0, 4.0);
+	exitSubBtn.updateHitbox();
+	exitSubBtn.antialiasing = false;
+	exitSubBtn.cameras = [uiCamera];
+	exitSubBtn.visible = false;
+	add(exitSubBtn);
+	
+	// ***** 创建淡出遮罩，并确保它被添加到最顶层（在 uiCamera 下） *****
+	fadeOutCover = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+	fadeOutCover.cameras = [uiCamera];
+	fadeOutCover.alpha = 0;
+	fadeOutCover.visible = false;
+	// 最后添加，确保它在所有其他 UI 元素之上
+	add(fadeOutCover);
+	
+	// 初始化模式
+	#if mobile
+		inputMode = "touch";
+	#else
+		inputMode = "keyboard";
+	#end
+	initializeMode();
+	
+	loadWeeks();
+	
+	if (FlxG.save.data.lastFreeplaySelected != null) {
+		currentSelection = FlxG.save.data.lastFreeplaySelected;
+	}
+	if (FlxG.save.data.lastFreeplayCategory != null) {
+		currentCategory = FlxG.save.data.lastFreeplayCategory;
+	}
+	updateCategory();
+	
+	if (FlxG.save.data.gameOpponentMode != null) {
+		oppMode = FlxG.save.data.gameOpponentMode;
+	} else if (FlxG.save.data.gameOpponentMode == null) {
+		FlxG.save.data.gameOpponentMode = false;
+		oppMode = false;
+	}
+	
+	// 启动进入动画（所有需要淡入的元素一开始设为透明）
+	menuTransition(false);
+}
+
+// ★★★ 子状态关闭时确保解锁（安全后备）★★★
+override function onSubStateClose():Void {
+    super.onSubStateClose();
+    lockObj.isSS = false;
+    transition = false;
+}
+
+// 辅助：创建按钮（使用pause/资源），指定缩放
+function createButton(asset:String, scale:Float = 1.6):FlxSprite {
+	var btn:FlxSprite = new FlxSprite().loadGraphic(Paths.image('pause/' + asset));
+	btn.scale.set(scale, scale);
+	btn.updateHitbox();
+	btn.antialiasing = false;
+	return btn;
+}
+
+function initializeMode() {
+	for (text in songTexts) {
+		text.color = FlxColor.WHITE;
+	}
+	hoveredObject = null;
+	touchSelectedID = -1;
+	selectedButton = -1;
+	if (inputMode == "keyboard") {
+		updateSelection(0);
+	}
+}
+
+function switchToTouch() {
+	if (inputMode == "touch") return;
+	inputMode = "touch";
+	for (text in songTexts) {
+		text.color = FlxColor.WHITE;
+	}
+	hoveredObject = null;
+	touchSelectedID = -1;
+	selectedButton = -1;
+}
+
+function switchToKeyboard() {
+	if (inputMode == "keyboard") return;
+	inputMode = "keyboard";
+	if (hoveredObject != null) {
+		hoveredObject.color = FlxColor.WHITE;
+		hoveredObject = null;
+	}
+	touchSelectedID = -1;
+	selectedButton = -1;
+	if (!checkingBox) {
+		updateSelection(0);
+	} else {
+		selectedButton = 0;
+		updateButtonSelection(0);
+	}
+}
+
+var currentWeek:Dynamic;
+var currentSong:Dynamic;
+var fileExists:Bool = true;
+var inGameplaySubstate:Bool = false;
+var anotherAccept:Bool = false;
+var acceptedAgain:Bool = false;
+
+function update(elapsed:Float) {
+	// ===== ★★★ 如果调试菜单打开、或正在开始游戏过渡、或菜单过渡中，完全跳过所有逻辑 ★★★ =====
+	if (lockObj.isSS || startingGame || transition) {
+		return;
+	}
+
+	// 模式切换
+	if (inputMode == "keyboard") {
+		if (FlxG.mouse.justPressed) {
+			switchToTouch();
+		}
+	} else {
+		if (controls.LEFT_P || controls.RIGHT_P || controls.UP_P || controls.DOWN_P || controls.ACCEPT) {
+			switchToKeyboard();
+		}
+	}
+	
+	// ---------- 警告跳过计时逻辑 ----------
+	if (createdWarningStuff && warningStuff[0].visible) {
+		if (skipPhase != -1) {
+			skipTimer += elapsed;
+			if (skipPhase == 0 && skipTimer >= 0.5) {
+				skipPhase = 1;
+				skipTimer = 0;
+			}
+			if (skipPhase == 1) {
+				skipAlpha = 1 - (skipTimer / 0.5);
+				if (skipAlpha <= 0) {
+					skipAlpha = 0;
+					skipPhase = -1;
+					skipClicksRemaining = 3;
+					updateSkipText();
+				}
+			}
+		}
+		if (skipText != null) {
+			skipText.alpha = skipAlpha;
+		}
+	}
+	
+	// ---------- 按钮点击处理（统一检测） ----------
+	if (!transition && !inGameplaySubstate) {
+		var mousePoint = FlxG.mouse.getWorldPosition(uiCamera);
+		
+		// 警告退出按钮（最高优先级）
+		if (createdWarningStuff && warningStuff[0].visible) {
+			if (FlxG.mouse.justReleased) {
+				if (warnExitBtn != null && warnExitBtn.visible && warnExitBtn.overlapsPoint(mousePoint, false, uiCamera)) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					songWarning(false);
+					anotherAccept = false;
+					return;
+				}
+				if (skipClicksRemaining > 0) {
+					skipClicksRemaining--;
+					skipTimer = 0;
+					skipPhase = 0;
+					skipAlpha = 1;
+					updateSkipText();
+					if (skipClicksRemaining <= 0) {
+						FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+						songWarning(false);
+						anotherAccept = false;
+						new FlxTimer().start(0.1, function(_) {
+							startSongAfterWarning();
+						});
+					}
+				}
+			}
+			return;
+		}
+		
+		if (!checkingBox) {
+			if (exitBtn != null && exitBtn.visible && exitBtn.overlapsPoint(mousePoint, false, uiCamera)) {
+				exitBtn.color = FlxColor.YELLOW;
+				if (FlxG.mouse.justReleased) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					menuTransition(true);
+					return;
+				}
+			} else if (exitBtn != null) {
+				exitBtn.color = FlxColor.WHITE;
+			}
+		} else {
+			if (exitSubBtn != null && exitSubBtn.visible && exitSubBtn.overlapsPoint(mousePoint, false, uiCamera)) {
+				exitSubBtn.color = FlxColor.YELLOW;
+				if (FlxG.mouse.justReleased) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					closeBox();
+					return;
+				}
+			} else if (exitSubBtn != null) {
+				exitSubBtn.color = FlxColor.WHITE;
+			}
+			if (startBtn != null && startBtn.visible && startBtn.overlapsPoint(mousePoint, false, uiCamera)) {
+				startBtn.color = FlxColor.YELLOW;
+				if (FlxG.mouse.justReleased && fileExists) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					startSong();
+					return;
+				}
+			} else if (startBtn != null) {
+				startBtn.color = FlxColor.WHITE;
+			}
+			if (settingsSubBtn != null && settingsSubBtn.visible && settingsSubBtn.overlapsPoint(mousePoint, false, uiCamera)) {
+				settingsSubBtn.color = FlxColor.YELLOW;
+				if (FlxG.mouse.justReleased) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					openSongSettings();
+					return;
+				}
+			} else if (settingsSubBtn != null) {
+				settingsSubBtn.color = FlxColor.WHITE;
+			}
+			
+			// ★★★ 检测机制组（checkbox 或 mechanics）★★★
+			var mechGroupVisible = (checkbox != null && checkbox.visible);
+			if (mechGroupVisible) {
+				var overMech = false;
+				if (checkbox != null && checkbox.visible && checkbox.overlapsPoint(mousePoint, false, uiCamera)) {
+					overMech = true;
+				}
+				if (!overMech && mechanics != null && mechanics.visible && mechanics.overlapsPoint(mousePoint, false, uiCamera)) {
+					overMech = true;
+				}
+				if (overMech) {
+					setMechanicsHighlight(true);
+					if (FlxG.mouse.justReleased) {
+						FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+						toggleMechanics();
+						return;
+					}
+				} else {
+					// 只有不是键盘选中状态（selectedButton != 2）时才取消高亮
+					if (selectedButton != 2) {
+						setMechanicsHighlight(false);
+					}
+				}
+			}
+		}
+	}
+	
+	if (inGameplaySubstate) {
+		if (controls.BACK) {
+			inGameplaySubstate = false;
+		}
+		return;
+	}
+
+	// ---------- 键盘处理 ----------
+	if (inputMode == "keyboard") {
+		if (!checkingBox) {
+			if (FlxG.keys.justPressed.CONTROL) {
+				if (currentSong != null && fileExists && songExists) {
+					openSongSettings();
+				}
+			}
+
+			if (controls.ACCEPT) {
+				boxVisibility(true);
+				updateBox(currentSong);
+			} else if (controls.BACK) {
+				menuTransition(true);
+			}
+			if (FlxG.mouse.wheel != 0) {
+				updateSelection(-FlxG.mouse.wheel);
+			}
+			
+			if (controls.LEFT_P) {
+				updateCategory(-1);
+			} else if (controls.RIGHT_P) {
+				updateCategory(1);
+			} else if (controls.UP_P) {
+				updateSelection(-1);
+			} else if (controls.DOWN_P) {
+				updateSelection(1);
+			}
+		} else {
+			if (controls.LEFT_P || controls.RIGHT_P) {
+				var dir = controls.LEFT_P ? -1 : 1;
+				var maxIdx = 2;
+				if (selectedButton == -1) selectedButton = 0;
+				selectedButton += dir;
+				if (selectedButton < 0) selectedButton = maxIdx;
+				if (selectedButton > maxIdx) selectedButton = 0;
+				updateButtonSelection(selectedButton);
+			}
+			if (controls.ACCEPT) {
+				if (selectedButton == 0 && fileExists) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					startSong();
+				} else if (selectedButton == 1) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					openSongSettings();
+				} else if (selectedButton == 2) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					toggleMechanics();
+				}
+			} else if (controls.BACK) {
+				FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+				closeBox();
+			}
+		}
+	}
+	
+	// ---------- 触摸模式歌曲选择 ----------
+	if (inputMode == "touch" && !checkingBox) {
+		var mouseWorldSong = FlxG.mouse.getWorldPosition(songCamera);
+		var leftDeadZone = FlxG.width * 0.35;
+		var mouseScreenX = FlxG.mouse.screenX;
+		
+		if (FlxG.mouse.justReleased) {
+			var mouseWorldMain = FlxG.mouse.getWorldPosition(camera);
+			if (week.visible && week.overlapsPoint(mouseWorldMain, true)) {
+				updateCategory(1);
+				FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
+				touchSelectedID = -1;
+				return;
+			}
+		}
+		
+		var isLeftRegion = mouseScreenX < leftDeadZone;
+		var newHover:UndertaleText = null;
+		if (!isLeftRegion) {
+			for (text in songTexts) {
+				if (text.visible && text.overlapsPoint(mouseWorldSong, true)) {
+					newHover = text;
+					break;
+				}
+			}
+		}
+		if (newHover != hoveredObject) {
+			if (hoveredObject != null) {
+				hoveredObject.color = FlxColor.WHITE;
+				var songIndex = hoveredObject.ID;
+				if (songIndex < currentWeek.songs.length && !Assets.exists(Paths.chart(currentWeek.songs[songIndex].song))) {
+					hoveredObject.color = FlxColor.RED;
+				}
+			}
+			if (newHover != null) {
+				FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
+				newHover.color = FlxColor.YELLOW;
+				currentSelection = newHover.ID;
+				currentSong = currentWeek.songs[currentSelection];
+				fileExists = Assets.exists(Paths.chart(currentSong.song, 'normal'));
+				songExists = FunkinSave.getSongHighscore(currentSong.song, 'normal').date != null;
+				if (lastBg != currentSong.background) {
+					lastBg = currentSong.background;
+					background.loadGraphic(Paths.image('freeplay/bgs/' + lastBg));
+				}
+				tip.visible = tipBG.visible = songExists;
+			}
+			hoveredObject = newHover;
+		}
+		
+		if (FlxG.mouse.justReleased) {
+			if (isLeftRegion) {
+				if (touchSelectedID != -1) {
+					touchSelectedID = -1;
+					FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
+				}
+				return;
+			}
+			if (hoveredObject != null) {
+				var clickedID = hoveredObject.ID;
+				if (touchSelectedID == clickedID) {
+					FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+					currentSelection = clickedID;
+					currentSong = currentWeek.songs[currentSelection];
+					fileExists = Assets.exists(Paths.chart(currentSong.song, 'normal'));
+					songExists = FunkinSave.getSongHighscore(currentSong.song, 'normal').date != null;
+					boxVisibility(true);
+					updateBox(currentSong);
+					touchSelectedID = -1;
+				} else {
+					touchSelectedID = clickedID;
+					currentSelection = clickedID;
+					currentSong = currentWeek.songs[currentSelection];
+					fileExists = Assets.exists(Paths.chart(currentSong.song, 'normal'));
+					songExists = FunkinSave.getSongHighscore(currentSong.song, 'normal').date != null;
+					if (lastBg != currentSong.background) {
+						lastBg = currentSong.background;
+						background.loadGraphic(Paths.image('freeplay/bgs/' + lastBg));
+					}
+					tip.visible = tipBG.visible = songExists;
+				}
+			} else {
+				if (touchSelectedID != -1) {
+					touchSelectedID = -1;
+					FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
+				}
+			}
+		}
+	}
+}
+
+function updateButtonSelection(idx:Int) {
+	if (startBtn != null) startBtn.color = FlxColor.WHITE;
+	if (settingsSubBtn != null) settingsSubBtn.color = FlxColor.WHITE;
+	// 机制组高亮（checkbox 和 mechanics）
+	if (idx == 2) {
+		setMechanicsHighlight(true);
+	} else {
+		setMechanicsHighlight(false);
+	}
+}
+
+function loadWeeks() {
+	var foundFiles:Array<String> = Paths.getFolderContent('data/categories/', false, -1, true);
+	for (file in foundFiles) {
+		var data:Dynamic = Json.parse(Assets.getText(Paths.json('categories/' + file)));
+		loadedWeeks.push(data);
+	}
+}
+
+function updateCategory(?v:Int) {
+	if (v != null) {
+		FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
+		currentCategory += v;
+		if (currentCategory > loadedWeeks.length - 1) {
+			currentCategory = 0;
+		} else if (currentCategory < 0) {
+			currentCategory = loadedWeeks.length - 1;
+		}
+		
+		if (week != null) {
+			FlxTween.tween(week, {alpha: 0}, 0.15, {ease: FlxEase.cubeInOut});
+		}
+	}
+	
+	currentWeek = loadedWeeks[currentCategory];
+	
+	if (songTexts.length > 0) {
+		for (text in songTexts) {
+			text.visible = false;
+		}
+	}
+	if (extraTexts.length > 0) {
+		for (text in extraTexts) {
+			text.destroy();
+		}
+		extraTexts = [];
+	}
+	
+	var index:Int = 0;
+	for (song in currentWeek.songs) {
+		var hasVariation:Bool = song.variation != '';
+		var existingText:UndertaleText = songTexts[index];
+		
+		var pos:UndertaleText = new UndertaleText(0, 0, song.variationShort, 'left', FlxG.width, 0.5, 'FFFFFF', 'wonder');
+		pos.autoSize = true;
+		var offset:Float = (pos.width / 2) + 2;
+	
+		if (existingText != null) {
+			existingText.text = song.displayName;
+			existingText.x = -834 - offset;
+			existingText.visible = true;
+		} else {
+			var text:UndertaleText = new UndertaleText(-834 - offset, (239.5 + (20 * index) + 3), song.displayName, 'right', FlxG.width, 1, 'FFFFFF', 'undertale-pixel');
+			text.cameras = [songCamera];
+			text.ID = index;
+			add(text);
+			songTexts.push(text);
+		}
+		if (hasVariation) {
+			var variation:UndertaleText = new UndertaleText(-514, 246.5 + (20 * index), song.variationShort, 'right', FlxG.width, 0.5, 'FFFFFF', 'wonder');
+			variation.cameras = [songCamera];
+			add(variation);
+			variation.color = FlxColor.fromString(song.variationColor);
+			extraTexts.push(variation);
+		}
+		index++;
+	}
+	
+	if (week != null) {
+		week.text = '< ' + currentWeek.categoryName.toLowerCase() + ' >';
+		if (v != null) {
+			FlxTween.tween(week, {alpha: 0.5}, 0.15, {ease: FlxEase.cubeInOut});
+		}
+	}
+	
+	DiscordUtil.changePresenceAdvanced({
+		details: 'In Freeplay (' + currentWeek.categoryName + ')',
+	});
+	
+	updateSelection(0);
+}
+
+function songWarning(visible:Bool) {
+	if (!createdWarningStuff) {
+		warnBg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		warnBg.screenCenter();
+		warnBg.cameras = [uiCamera];
+		warnBg.alpha = 0.8;
+		add(warnBg);
+		warningStuff.push(warnBg);
+	
+		warnTitle = new UndertaleText(0, 98, 'WARNING!', 'center', FlxG.width, 4, 'FF0000', 'undertale-pixel');
+		warnTitle.screenCenter(FlxAxes.X);
+		warnTitle.cameras = [uiCamera];
+		add(warnTitle);
+		warningStuff.push(warnTitle);
+		
+		warnInfo = new UndertaleText(0, warnTitle.y + 234, 'This song uses effects and other things\nthat could be dangerous to people with\nphoto sensitivity or epilepsy.\n \nThis alert appears because it\'s your first\ntime playing this song and you have\nflashing lights enabled.\n \nIf this is a mistake please go back and\ncheck your settings.', 'center', FlxG.width, 3, 'FFFFFF', 'undertale-pixel');
+		warnInfo.screenCenter(FlxAxes.X);
+		warnInfo.cameras = [uiCamera];
+		add(warnInfo);
+		warningStuff.push(warnInfo);
+		
+		skipText = new UndertaleText(0, FlxG.height - 40, 'Skip: 3 clicks remaining', 'center', FlxG.width, 5, 'FFFFFF', 'crypt');
+		skipText.antialiasing = false;
+		skipText.screenCenter(FlxAxes.X);
+		skipText.cameras = [uiCamera];
+		add(skipText);
+		warningStuff.push(skipText);
+		
+		warnExitBtn = new FlxSprite().loadGraphic(Paths.image('freeplay/backspace'));
+		warnExitBtn.scale.set(4.0, 4.0);
+		warnExitBtn.updateHitbox();
+		warnExitBtn.antialiasing = false;
+		warnExitBtn.cameras = [uiCamera];
+		warnExitBtn.setPosition(10, FlxG.height - warnExitBtn.height - 10);
+		add(warnExitBtn);
+		warningStuff.push(warnExitBtn);
+		
+		createdWarningStuff = true;
+	} else {
+		for (thing in warningStuff) {
+			thing.visible = visible;
+		}
+	}
+	previewTheme.pitch = visible ? 0.99 : 1;
+	previewTheme.volume = visible ? Options.volumeMusic / 2 : Options.volumeMusic;
+	if (visible) {
+		skipClicksRemaining = 3;
+		skipTimer = 0;
+		skipPhase = 0;
+		skipAlpha = 1;
+		updateSkipText();
+		updateAllButtonsVisibility();
+	} else {
+		updateAllButtonsVisibility();
+	}
+}
+
+function updateSkipText() {
+	if (skipText != null) {
+		skipText.text = 'Skip: ' + skipClicksRemaining + ' clicks remaining';
+		skipText.screenCenter(FlxAxes.X);
+		var progress = 1 - (skipClicksRemaining / 3);
+		var color = FlxColor.interpolate(FlxColor.WHITE, FlxColor.RED, progress);
+		skipText.color = color;
+	}
+}
+
+function updateAllButtonsVisibility() {
+	var warnVisible = createdWarningStuff && warningStuff[0].visible;
+	
+	if (exitBtn != null) {
+		exitBtn.visible = !warnVisible && !checkingBox;
+	}
+	if (startBtn != null) startBtn.visible = !warnVisible && checkingBox;
+	if (startBtnBg != null) startBtnBg.visible = !warnVisible && checkingBox;
+	if (settingsSubBtn != null) {
+		settingsSubBtn.visible = !warnVisible && checkingBox;
+		if (settingsSubBtn.visible) {
+			settingsSubBtn.alpha = (songExists ? 1 : 0.5);
+		}
+	}
+	// 机制组可见性由 boxVisibility 统一控制，这里不再单独设置
+	if (exitSubBtn != null) exitSubBtn.visible = !warnVisible && checkingBox;
+}
+
+var lastBg:String = '';
+
+function updateSelection(?v:Int) {
+	if (inputMode != "keyboard") return;
+	if (v != null) {
+		if (v != 0) {
+			FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
+		}
+		currentSelection += v;
+		if (currentSelection > currentWeek.songs.length - 1) {
+			currentSelection = 0;
+		} else if (currentSelection < 0) {
+			currentSelection = currentWeek.songs.length - 1;
+		}
+	}
+	currentSong = currentWeek.songs[currentSelection];
+	fileExists = Assets.exists(Paths.chart(currentSong.song, 'normal'));
+	songExists = FunkinSave.getSongHighscore(currentSong.song, 'normal').date != null;
+	tip.visible = tipBG.visible = songExists;
+	if (lastBg != currentSong.background) {
+		lastBg = currentSong.background;
+		background.loadGraphic(Paths.image('freeplay/bgs/' + lastBg));
+	}
+	
+	for (i in 0...currentWeek.songs.length) {
+		var text:UndertaleText = songTexts[i];
+		text.color = (currentSelection == text.ID ? FlxColor.YELLOW : (!Assets.exists(Paths.chart(currentWeek.songs[text.ID].song)) ? FlxColor.RED : FlxColor.WHITE));
+	}
+}
+
+function menuTransition(back:Bool) {
+	transition = true;
+
+	camera.alpha = (back ? 1 : 0);
+	theme.fadeIn(transitionTime, (back ? themeVolume : 0), (back ? 0 : themeVolume));
+	if (FlxG.sound.music != null) {
+		FlxG.sound.music.fadeIn(transitionTime, (back ? 0 : 1), (back ? 1 : 0));
+	}
+	FlxTween.tween(camera, {alpha: (back ? 0 : 1)}, transitionTime, {
+		ease: FlxEase.cubeInOut,
+		onComplete: function(_) {
+			if (back) {
+				FlxG.switchState(new ModState('ModMainMenu', 'freeplay'));
+			} else {
+				transition = false;
+			}
+		}
+	});
+
+	var index:Int = 0;
+	for (dither in dithers) {
+		dither[0].x += (back ? 0 : 20);
+		FlxTween.tween(dither[0], {x: (((background.x + background.width) - 119) + (15 * index)) + (back ? 20 : 0)}, transitionTime / (index + 1), {ease: FlxEase.cubeInOut});
+		index++;
+	}
+
+	songCamera.x += (back ? 0 : 200);
+	FlxTween.tween(songCamera, {x: 560 + (back ? 200 : 0)}, transitionTime, {ease: FlxEase.cubeInOut});
+
+	infoCamera.x += (back ? 0 : 200);
+	infoCamera.alpha = back ? 1 : 0;
+	FlxTween.tween(infoCamera, {x: back ? 200 : 0, alpha: back ? 0 : 1}, transitionTime, {ease: FlxEase.cubeInOut});
+
+	longAssLine.x += (back ? 0 : 50);
+	FlxTween.tween(longAssLine, {x: (background.x + 200) + (back ? 50 : 0)}, transitionTime, {ease: FlxEase.cubeInOut});
+	background.x = (back ? 419 : 440);
+	FlxTween.tween(background, {x: (back ? 440 : 419)}, transitionTime, {ease: FlxEase.cubeInOut});
+
+	var targetAlpha:Float = back ? 0 : 1;
+	var startAlpha:Float = back ? 1 : 0;
+
+	for (text in songTexts) {
+		text.alpha = startAlpha;
+		FlxTween.tween(text, {alpha: targetAlpha}, transitionTime, {ease: FlxEase.cubeInOut});
+	}
+	for (text in extraTexts) {
+		text.alpha = startAlpha;
+		FlxTween.tween(text, {alpha: targetAlpha}, transitionTime, {ease: FlxEase.cubeInOut});
+	}
+	
+	if (week != null) {
+		var startX:Float;
+		var endX:Float;
+		if (back) {
+			startX = 71;
+			endX = 71 + 200;
+		} else {
+			startX = 71 + 200;
+			endX = 71;
+		}
+		week.x = startX;
+		week.alpha = startAlpha;
+		FlxTween.tween(week, {x: endX, alpha: targetAlpha}, transitionTime, {ease: FlxEase.cubeInOut});
+	}
+	
+	for (line in lines) {
+		line.alpha = startAlpha * 0.5;
+		FlxTween.tween(line, {alpha: targetAlpha * 0.5}, transitionTime, {ease: FlxEase.cubeInOut});
+	}
+
+	if (exitBtn != null) {
+		exitBtn.alpha = startAlpha;
+		FlxTween.tween(exitBtn, {alpha: targetAlpha}, transitionTime, {ease: FlxEase.cubeInOut});
+	}
+}
+
+function generateBox() {
+	render = new FlxSprite().loadGraphic(Paths.image('freeplay/renders/chara'));
+	render.screenCenter();
+	render.x = 0;
+	boxItems.push(render);
+
+	box.scale.set(2, 2);
+	box.screenCenter();
+	box.setPosition(box.x + 281, box.y - 1);
+	boxItems.push(box);
+	
+	boxBg = new FlxSprite(box.x, box.y).makeGraphic(box.width, box.height, FlxColor.BLACK);
+	boxBg.scale.set(box.scale.x - 0.1, box.scale.y - 0.1);
+	boxBg.alpha = 0.9;
+	boxItems.push(boxBg);
+	
+	boxTitle = new UndertaleText(box.x - 78, box.y - 114, 'If you\'re seeing this, I probably messed up.', 'left', FlxG.width, 4, 'FFFFFF', 'undertale-pixel');
+	boxTitle.autoSize = false;
+	boxTitle.updateHitbox();
+	boxItems.push(boxTitle);
+	
+	variation = new UndertaleText(boxTitle.x + 4, boxTitle.y + 63, 'variation', 'left', FlxG.width, 2, 'FFFFFF', 'wonder');
+	variation.autoSize = false;
+	variation.updateHitbox();
+	boxItems.push(variation);
+	
+	scoreText = new UndertaleText(boxTitle.x, boxTitle.y + 129, 'SCORE:', 'left', FlxG.width, 4, 'FFFFFF', 'undertale-pixel');
+	scoreText.autoSize = false;
+	scoreText.updateHitbox();
+	boxItems.push(scoreText);
+	
+	score = new UndertaleText(scoreText.x, scoreText.y + 58, '0', 'left', FlxG.width, 4, 'FFFFFF', 'crypt');
+	score.autoSize = false;
+	score.updateHitbox();
+	boxItems.push(score);
+
+	accuracyText = new UndertaleText(boxTitle.x, boxTitle.y + 214, 'ACCURACY:', 'left', FlxG.width, 4, 'FFFFFF', 'undertale-pixel');
+	accuracyText.autoSize = false;
+	accuracyText.updateHitbox();
+	boxItems.push(accuracyText);
+	
+	accuracy = new UndertaleText(accuracyText.x, accuracyText.y + 58, '0', 'left', FlxG.width, 4, 'FFFFFF', 'crypt');
+	accuracy.autoSize = false;
+	accuracy.updateHitbox();
+	boxItems.push(accuracy);
+	
+	rankText = new UndertaleText(boxTitle.x, boxTitle.y + 294, 'MISSES:', 'left', FlxG.width, 4, 'FFFFFF', 'undertale-pixel');
+	rankText.autoSize = false;
+	rankText.updateHitbox();
+	boxItems.push(rankText);
+	
+	rank = new UndertaleText(rankText.x, rankText.y + 58, '0', 'left', FlxG.width, 4, 'FFFFFF', 'crypt');
+	rank.autoSize = false;
+	rank.updateHitbox();
+	boxItems.push(rank);
+	
+	// ----- 机制部分（仅保留主标签和复选框，无提示）-----
+	mechanics = new UndertaleText(boxTitle.x, boxTitle.y + 376, 'MECHANICS:', 'left', FlxG.width, 4, 'FFFFFF', 'undertale-pixel');
+	mechanics.updateHitbox();
+	boxItems.push(mechanics);
+	
+	checkbox = new FlxSprite(mechanics.x + 300, mechanics.y - 36);
+	checkbox.frames = Paths.getSparrowAtlas('options/checkbox');
+	checkbox.animation.addByPrefix('unchecked', 'checkbox check0000', 24, false);
+	checkbox.animation.addByPrefix('unchecking', 'checkbox uncheck0', 24, false);
+	checkbox.animation.addByPrefix('checking', 'checkbox check0', 24, false);
+	checkbox.animation.addByPrefix('checked', 'checkbox check0005', 24, false);
+	checkbox.scale.set(4, 4);
+	checkbox.updateHitbox();
+	boxItems.push(checkbox);
+	// --------------------------------------------
+	
+	box.updateHitbox();
+	box.screenCenter();
+	box.setPosition(box.x + 281, box.y - 1);
+
+	for (item in boxItems) {
+		item.cameras = [uiCamera];
+		add(item);
+	}
+	// 默认隐藏，由 boxVisibility 控制
+	checkbox.visible = false;
+	mechanics.visible = false;
+}
+
+var ranks:Array<Dynamic> = [
+	[0, 'F', 0xFFFF4444],
+	[0.5, 'E', 0xFFFF8844],
+	[0.7, 'D', 0xFFFFAA44],
+	[0.8, 'C', 0xFFFFFF44],
+	[0.85, 'B', 0xFFAAFF44],
+	[0.9, 'A', 0xFF88FF44],
+	[0.95, 'S', 0xFF44FFFF],
+	[1, 'S++', 0xF44FFFF]
+];
+var songExists:Bool = false;
+
+function updateBox(song:Dynamic) {
+	FlxG.sound.play(Paths.sound((fileExists ? 'select' : 'hurt')), Options.volumeSFX);
+
+	var songData:Dynamic = FunkinSave.getSongHighscore(song.song, 'normal');
+	songExists = (songData.date != null);
+
+	previewTheme = FlxG.sound.load(Paths.music('freeplaypreviews/' + song.song), themeVolume, true);
+	previewTheme.play();
+	previewTheme.volume = 0;
+	previewTheme.fadeIn(0.1, 0, 1);
+	
+	theme.fadeIn(0.1, themeVolume, 0);
+	
+	boxTitle.text = song.displayName;
+	boxTitle.scale.set(boxTitle.scale.y, boxTitle.scale.y);
+	if (boxTitle.text.length > 11) {
+		var scaler:Float = 0.19 * (boxTitle.text.length - 11);
+		boxTitle.scale.set(boxTitle.scale.x - scaler, boxTitle.scale.y);
+	}
+	boxTitle.updateHitbox();
+	
+	render.loadGraphic(Paths.image('freeplay/renders/' + song.renderInfo.image));
+	render.alpha = 0;
+	render.scale.set(song.renderInfo.scale[0], song.renderInfo.scale[1]);
+	var startX = song.renderInfo.offset[0] - 300;
+	var startY = song.renderInfo.offset[1];
+	render.offset.set(startX, startY);
+	render.alpha = 1;
+	FlxTween.tween(render.offset, {x: song.renderInfo.offset[0], y: song.renderInfo.offset[1]}, 0.5, {ease: FlxEase.cubeOut});
+	
+	variation.text = song.variation;
+	variation.color = FlxColor.fromString(song.variationColor);
+	
+	// 显示/隐藏分数相关（保持原有逻辑）
+	for (item in [scoreText, score, accuracyText, accuracy, rankText, rank]) {
+		item.visible = songExists;
+	}
+	if (!songExists || !fileExists) {
+		scoreText.visible = true;
+		scoreText.alpha = (fileExists ? 0.5 : 1);
+		scoreText.text = (fileExists ? '(You haven\'t\nplayed this\nsong yet!)' : 'THIS SONG\nDOESN\'T\nEXIST.');
+		scoreText.color = (fileExists ? FlxColor.WHITE : FlxColor.RED);
+	} else {
+		scoreText.text = 'SCORE:';
+		scoreText.alpha = 1;
+		scoreText.color = FlxColor.WHITE;
+		
+		score.text = songData.score;
+		accuracy.text = CoolUtil.quantize(songData.accuracy * 100, 100) + '%' ;
+		
+		var foundRank:String = '';
+		var foundColor:FlxColor;
+		for (rank in ranks) {
+			var percent:Float = rank[0];
+			if (percent <= songData.accuracy) {
+				foundRank = rank[1];
+				foundColor = rank[2];
+			}
+		}
+		accuracy.text = accuracy.text + ' (' + foundRank.toLowerCase() + ')';
+		accuracy.color = foundColor;
+		
+		rank.text = songData.misses;
+	}
+	
+	// 控制机制组可见性（无提示）
+	if (song.mechanics == true) {
+		var saveMechField:String = song.song + '_mechanics_allowed';
+		var mechanicAllowed:Dynamic = Reflect.field(FlxG.save.data, saveMechField);
+		if (mechanicAllowed == null) {
+			Reflect.setField(FlxG.save.data, saveMechField, true);
+			mechanicAllowed = Reflect.field(FlxG.save.data, saveMechField);
+		}
+		checkbox.animation.play((mechanicAllowed ? 'checked' : 'unchecked'), true);
+		mechanics.visible = true;
+		checkbox.visible = true;
+	} else {
+		mechanics.visible = false;
+		checkbox.visible = false;
+	}
+	
+	positionButtonsInCard();
+	updateAllButtonsVisibility();
+}
+
+// ★★★ 卡片内按钮布局（移除了机制组位置计算）★★★
+function positionButtonsInCard() {
+	if (box == null) return;
+	var cardX = box.x;
+	var cardY = box.y;
+	var cardW = box.width;
+	var cardH = box.height;
+	
+	// 1. 先定位 startBtn 和 settingsSubBtn（保持原逻辑）
+	if (startBtn != null) {
+		startBtn.setPosition(cardX + cardW - startBtn.width - 15, cardY + cardH - startBtn.height - 15);
+		startBtn.visible = true;
+		if (startBtnBg != null) {
+			startBtnBg.setPosition(startBtn.x, startBtn.y);
+			startBtnBg.makeGraphic(Math.round(startBtn.width), Math.round(startBtn.height), FlxColor.BLACK);
+			var targetAlpha = (fileExists ? 0 : 1);
+			if (startBtnBg.alpha != targetAlpha) {
+				FlxTween.tween(startBtnBg, {alpha: targetAlpha}, 0.15, {ease: FlxEase.cubeInOut});
+			}
+			startBtnBg.visible = true;
+		}
+		startBtn.alpha = fileExists ? 1 : 0.5;
+	}
+	
+	if (settingsSubBtn != null) {
+		settingsSubBtn.setPosition(startBtn.x - settingsSubBtn.width - 15, startBtn.y);
+		settingsSubBtn.visible = true;
+		settingsSubBtn.alpha = (songExists ? 1 : 0.5);
+	}
+	
+	if (exitSubBtn != null) {
+		exitSubBtn.setPosition(10, FlxG.height - exitSubBtn.height - 10);
+	}
+}
+
+function boxVisibility(v:Bool) {
+	FlxTween.tween(infoCamCover, {alpha: (v ? 0.5 : 0)}, 0.1);
+	checkingBox = v;
+	for (item in boxItems) {
+		item.visible = v;
+	}
+	if (v) {
+		touchSelectedID = -1;
+		positionButtonsInCard();
+		if (exitBtn != null) exitBtn.color = FlxColor.WHITE;
+		if (inputMode == "keyboard") {
+			selectedButton = 0;
+			updateButtonSelection(0);
+		}
+	} else {
+		selectedButton = -1;
+	}
+	updateAllButtonsVisibility();
+}
+
+function closeBox() {
+	previewTheme.fadeIn(0.1, themeVolume, 0);
+	theme.fadeIn(0.1, 0, themeVolume);
+	boxVisibility(false);
+	if (createdWarningStuff) {
+		songWarning(false);
+	}
+	anotherAccept = false;
+}
+
+function startSong() {
+	if (!fileExists) return;
+	if (!songExists && FlxG.save.data.flashingLights && !anotherAccept) {
+		anotherAccept = true;
+		songWarning(true);
+		return;
+	}
+	startSongAfterWarning();
+}
+
+function startFadeOutAndSwitch() {
+	startingGame = true;
+	
+	if (fadeOutCover != null) {
+		remove(fadeOutCover);
+		add(fadeOutCover);
+		fadeOutCover.visible = true;
+		fadeOutCover.alpha = 0;
+		FlxTween.tween(fadeOutCover, {alpha: 1}, 0.3, {ease: FlxEase.cubeInOut});
+	}
+	
+	new FlxTimer().start(0.35, function(_) {
+		if (songExists) {
+			Options.freeplayLastSong = currentSong.song;
+			Options.freeplayLastDifficulty = 'normal';
+			Options.freeplayLastVariation = '';
+			PlayState.loadSong(currentSong.song, 'normal', FlxG.save.data.gameOpponentMode, false);
+			FlxG.switchState(new PlayState());
+		} else {
+			switch(currentSong.song) {
+				case 'vent':
+					FlxG.switchState(new ModState('pre_vents'));
+				case 'true-reset':
+					FlxG.switchState(new ModState('pre_truereset'));
+				default:
+					Options.freeplayLastSong = currentSong.song;
+					Options.freeplayLastDifficulty = 'normal';
+					Options.freeplayLastVariation = '';
+					PlayState.loadSong(currentSong.song, 'normal', FlxG.save.data.gameOpponentMode, false);
+					FlxG.switchState(new PlayState());
+			}
+		}
+	});
+}
+
+function startSongAfterWarning() {
+	anotherAccept = false;
+	startFadeOutAndSwitch();
+}
+
+function toggleMechanics() {
+	var saveMechField:String = currentSong.song + '_mechanics_allowed';
+	var mechanicAllowed:Dynamic = Reflect.field(FlxG.save.data, saveMechField);
+	Reflect.setField(FlxG.save.data, saveMechField, !mechanicAllowed);
+	mechanicAllowed = Reflect.field(FlxG.save.data, saveMechField);
+	checkbox.animation.play((mechanicAllowed ? 'checking' : 'unchecking'), true);
+}
+
+function openSongSettings() {
+	if (!fileExists) return;
+	if (!songExists) return;
+
+	lockObj.isSS = true;
+
+	var configArray:Array<Dynamic> = [
+		{
+			type: 'choice',
+			title: 'Scroll Type',
+			description: '*If the scroll speed value/ñshould multiply or replace/ñthe song\'s scroll speed.',
+			defaultValue: 0,
+			parentValue: 'gameScrollType',
+			choices: ['multiplicative', 'constant']
+		},
+		{
+			type: 'slider',
+			title: 'Scroll Speed',
+			description: '*Your scroll speed.',
+			defaultValue: 1,
+			parentValue: 'gameScrollSpeed',
+			min: 0.1,
+			max: 6,
+			valueStep: 0.05
+		},
+		{
+			type: 'slider',
+			title: 'Health Gain Multiplier',
+			description: '*The value your health won/ñwhen hitting a note is/ñmultiplied by.',
+			defaultValue: 1,
+			parentValue: 'gameHealthGainMult',
+			valueSuffix: 'x',
+			max: 5,
+			min: 0.1,
+			valueStep: 0.1
+		},
+		{
+			type: 'slider',
+			title: 'Health Loss Multiplier',
+			description: '*The value your health lost/ñwhen missing a note is/ñmultiplied by.',
+			defaultValue: 1,
+			parentValue: 'gameHealthLossMult',
+			valueSuffix: 'x',
+			max: 5,
+			min: 0.1,
+			valueStep: 0.1
+		},
+		{
+			type: 'checkbox',
+			title: 'Instakill on Miss',
+			description: '*If you miss you die.',
+			defaultValue: false,
+			parentValue: 'missInstaKill'
+		},
+		{
+			type: 'checkbox',
+			title: 'Opponent Mode',
+			description: '*If checked, you play on the/ñopponent side instead of the/ñplayer side.',
+			defaultValue: false,
+			parentValue: 'gameOpponentMode'
+		}
+	];
+
+	openSubState(new ModSubState('OptionSubstateSubstate', [lockObj, configArray]));
+}
+
+function onFocus() {
+	theme.resume();
+}
+
+function onFocusLost() {
+	theme.pause();
+}

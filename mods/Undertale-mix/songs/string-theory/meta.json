@@ -1,0 +1,20 @@
+{
+	"customValues": {
+		"opponentColors": "A5004D,B7D855",
+		"opponentIcons": "gf,pico",
+		"deathTheme": "bluescreamofdeath"
+	},
+	"color": "#000000",
+	"opponentModeAllowed": false,
+	"difficulties": [
+		"normal",
+		"abnormal"
+	],
+	"icon": "face",
+	"coopAllowed": false,
+	"stepsPerBeat": 4,
+	"displayName": "String Theory",
+	"needsVoices": true,
+	"beatsPerMeasure": 4,
+	"bpm": 119
+}

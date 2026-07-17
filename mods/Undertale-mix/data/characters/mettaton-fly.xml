@@ -1,0 +1,12 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="mettaton_fly" antialiasing="false" camx="-148.4" camy="100">
+	<anim name="idle" anim="idle0"/>
+	<anim name="singDOWN" anim="down"/>
+	<anim name="singRIGHT" anim="right"/>
+	<anim name="singLEFT" anim="left"/>
+	<anim name="singUP" anim="up"/>
+	<anim name="idle-arm" anim="idlearm0"/>
+	<anim name="idle-wave" anim="idlewave" loop="true"/>
+	<anim name="idle-laugh" anim="idlelaugh" loop="true"/>
+	<anim name="idle-armrest" anim="idlearmrest"/>
+</character>

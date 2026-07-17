@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="chara.png">
+<SubTexture name="chara bop0000" x="0" y="110" width="62" height="52" frameX="0" frameY="-4" frameWidth="62" frameHeight="56" />
+<SubTexture name="chara bop0001" x="118" y="0" width="62" height="53" frameX="0" frameY="-3" frameWidth="62" frameHeight="56" />
+<SubTexture name="chara bop0002" x="118" y="53" width="62" height="53" frameX="0" frameY="-3" frameWidth="62" frameHeight="56" />
+<SubTexture name="chara bop0003" x="59" y="0" width="59" height="54" frameX="-2" frameY="-2" frameWidth="62" frameHeight="56" />
+<SubTexture name="chara bop0004" x="0" y="56" width="59" height="54" frameX="-2" frameY="-2" frameWidth="62" frameHeight="56" />
+<SubTexture name="chara bop0005" x="0" y="0" width="59" height="56" frameX="-2" frameY="0" frameWidth="62" frameHeight="56" />
+<SubTexture name="chara bop0006" x="0" y="0" width="59" height="56" frameX="-2" frameY="0" frameWidth="62" frameHeight="56" />
+</TextureAtlas>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="default.png" width="687" height="688">
+	<SubTexture name="left confirm0000" x="0" y="181" width="180" height="180" frameX="-0" frameY="-0" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="down confirm0000" x="0" y="0" width="180" height="180" frameX="-0" frameY="-0" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="up confirm0000" x="181" y="0" width="180" height="180" frameX="-0" frameY="-0" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="right confirm0000" x="0" y="362" width="180" height="180" frameX="-0" frameY="-0" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="arrowLEFT0000" x="525" y="0" width="162" height="162" frameX="-9" frameY="-9" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="arrowDOWN0000" x="362" y="0" width="162" height="162" frameX="-9" frameY="-9" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="arrowUP0000" x="525" y="163" width="162" height="162" frameX="-9" frameY="-9" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="arrowRIGHT0000" x="362" y="163" width="162" height="162" frameX="-9" frameY="-9" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="purple0000" x="290" y="471" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="blue0000" x="0" y="543" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="green0000" x="181" y="181" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="red0000" x="326" y="326" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="blue hold end0000" x="290" y="616" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="blue hold piece0000" x="345" y="616" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="green hold end0000" x="400" y="616" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="green hold piece0000" x="455" y="616" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="pruple end hold0000" x="510" y="616" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="purple hold piece0000" x="565" y="616" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="red hold end0000" x="620" y="326" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="red hold piece0000" x="620" y="399" width="54" height="72" frameX="-0" frameY="-0" frameWidth="54" frameHeight="72"/>
+	<SubTexture name="down press0000" x="145" y="543" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="left press0000" x="181" y="326" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="right press0000" x="435" y="471" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+	<SubTexture name="up press0000" x="471" y="326" width="144" height="144" frameX="-18" frameY="-18" frameWidth="180" frameHeight="180"/>
+</TextureAtlas>

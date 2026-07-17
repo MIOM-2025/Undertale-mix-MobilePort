@@ -1,0 +1,81 @@
+import UndertaleText;
+
+var camera:FlxCamera = new FlxCamera();
+var mainText:UndertaleText = new UndertaleText(0, 0, '', 'center', FlxG.width, 3, 'FFFFFF', 'undertale-pixel');
+var curPage:Int = 0;
+var holdTime:Float = 0;
+var tipText:UndertaleText;
+
+function create() {
+	FlxG.cameras.add(camera, false);
+	camera.bgColor = FlxColor.TRANSPARENT;
+	camera.antialiasing = false;
+	this.cameras = [camera];
+	
+	camera.alpha = 0;
+	camera.zoom = 0.5;
+	
+	var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+	bg.scale.set(2, 2);
+	bg.updateHitbox();
+	bg.screenCenter();
+	add(bg);
+	bg.alpha = 0.8;
+	
+	var hey:FlxSprite = new FlxSprite(0, 30).loadGraphic(Paths.image('alert'));
+	hey.scale.set(1.5, 1.5);
+	hey.updateHitbox();
+	hey.screenCenter(FlxAxes.X);
+	add(hey);
+	
+	mainText.updateHitbox();
+	mainText.screenCenter();
+	add(mainText);
+	
+	// 右下角提示（与正文相同字体）
+	tipText = new UndertaleText(0, 0, '长按屏幕下一步 1.0s', 'right', FlxG.width, 1.5, 'FFFFFF', 'undertale-pixel');
+	tipText.updateHitbox();
+	tipText.y = FlxG.height - tipText.height - 10;
+	tipText.x = FlxG.width - tipText.width - 10;
+	add(tipText);
+	
+	FlxTween.tween(camera, {zoom: 1, alpha: 1}, 0.1, {ease: FlxEase.cubeOut});
+	
+	moveToNextPage();
+}
+
+function update(elapsed:Float) {
+	var holding = controls.ACCEPT || FlxG.mouse.pressed;
+	
+	if (holding) {
+		holdTime += elapsed;
+		if (holdTime >= 1.0) {
+			holdTime = 0;
+			moveToNextPage();
+		}
+	} else {
+		holdTime = 0;
+	}
+	
+	// 颜色从白到红渐变
+	var progress = Math.min(holdTime, 1.0);
+	tipText.color = FlxColor.interpolate(FlxColor.WHITE, FlxColor.RED, progress);
+	tipText.text = '长按屏幕下一步 ' + (Math.round((1 - progress) * 10) / 10) + 's';
+	
+	// 重新定位（右对齐会受宽度影响，先更新hitbox再调位置）
+	tipText.updateHitbox();
+	tipText.y = FlxG.height - tipText.height - 10;
+	tipText.x = FlxG.width - tipText.width - 10;
+}
+
+function moveToNextPage() {
+	if (curPage - 1 != data.length - 1) {
+		mainText.text = data[curPage];
+		curPage++;
+		holdTime = 0;
+	} else {
+		FlxTween.tween(camera, {zoom: 0.5, alpha: 0}, 0.1, {ease: FlxEase.cubeOut, onComplete: function() {
+			close();
+		}});
+	}
+}

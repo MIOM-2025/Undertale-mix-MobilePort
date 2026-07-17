@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="toby.png" width="96" height="111">
+	<SubTexture name="tonydog walk0000" x="31" y="33" width="29" height="24" rotated="true" frameX="-14" frameY="-10" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog walk0001" x="72" y="0" width="24" height="29" frameX="-14" frameY="-10" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog idle0000" x="0" y="86" width="27" height="25" frameX="-11" frameY="-14" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog idle0001" x="55" y="85" width="26" height="26" frameX="-12" frameY="-13" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog idle0002" x="72" y="30" width="24" height="28" frameX="-14" frameY="-11" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog idle0003" x="31" y="33" width="29" height="24" rotated="true" frameX="-14" frameY="-10" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog left0000" x="0" y="58" width="29" height="27" rotated="true" frameX="-8" frameY="-10" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog left0001" x="30" y="58" width="29" height="26" rotated="true" frameX="-10" frameY="-10" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog right0000" x="0" y="34" width="30" height="23" rotated="true" frameX="-17" frameY="-9" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog right0001" x="48" y="0" width="23" height="30" frameX="-16" frameY="-9" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog up0000" x="0" y="0" width="23" height="33" frameX="-14" frameY="-6" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog up0001" x="24" y="0" width="23" height="32" frameX="-14" frameY="-7" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog down0000" x="30" y="85" width="24" height="26" frameX="-13" frameY="-13" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="tonydog down0001" x="60" y="59" width="27" height="23" rotated="true" frameX="-14" frameY="-12" frameWidth="50" frameHeight="50"/>
+</TextureAtlas>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="earthboundbg.png" width="1541" height="1541">
+	<SubTexture name="background0000" x="0" y="0" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0001" x="257" y="0" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0002" x="0" y="257" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0003" x="257" y="257" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0004" x="514" y="0" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0005" x="514" y="257" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0006" x="0" y="514" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0007" x="257" y="514" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0008" x="514" y="514" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0009" x="771" y="0" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0010" x="771" y="257" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0011" x="771" y="514" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0012" x="0" y="771" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0013" x="257" y="771" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0014" x="514" y="771" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0015" x="771" y="771" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0016" x="1028" y="0" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0017" x="1028" y="257" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0018" x="1028" y="514" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0019" x="1028" y="771" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0020" x="0" y="1028" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0021" x="257" y="1028" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0022" x="514" y="1028" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0023" x="771" y="1028" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0024" x="1028" y="1028" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0025" x="1285" y="0" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0026" x="1285" y="257" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0027" x="1285" y="514" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0028" x="1285" y="771" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0029" x="1285" y="1028" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0030" x="0" y="1285" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0031" x="257" y="1285" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+	<SubTexture name="background0032" x="514" y="1285" width="256" height="256" frameX="-0" frameY="-0" frameWidth="256" frameHeight="256"/>
+</TextureAtlas>

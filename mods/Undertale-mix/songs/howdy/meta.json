@@ -1,0 +1,18 @@
+{
+	"color": "#000000",
+	"customValues": {
+		"deathTheme": "idiot"
+	},
+	"opponentModeAllowed": true,
+	"icon": "face",
+	"difficulties": [
+		"normal",
+		"harder"
+	],
+	"coopAllowed": true,
+	"stepsPerBeat": 4,
+	"displayName": "Howdy!",
+	"needsVoices": true,
+	"beatsPerMeasure": 4,
+	"bpm": 120
+}

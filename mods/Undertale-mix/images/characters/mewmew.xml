@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="mewmew.png">
+<SubTexture name="mewmew idle0000" x="105" y="0" width="38" height="41" frameX="-4" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew up0000" x="0" y="0" width="32" height="43" frameX="-4" frameY="-2" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew up0001" x="32" y="0" width="36" height="43" frameX="-4" frameY="-2" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew up0002" x="68" y="0" width="37" height="42" frameX="-4" frameY="-3" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew up0003" x="0" y="43" width="39" height="42" frameX="-4" frameY="-3" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew up0004" x="39" y="43" width="38" height="42" frameX="-4" frameY="-3" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew down0000" x="183" y="74" width="34" height="35" frameX="-4" frameY="-10" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew down0001" x="183" y="109" width="34" height="35" frameX="-4" frameY="-10" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew down0002" x="109" y="126" width="39" height="37" frameX="-4" frameY="-8" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew down0003" x="183" y="0" width="39" height="37" frameX="-4" frameY="-8" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew down0004" x="183" y="37" width="39" height="37" frameX="-4" frameY="-8" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew left0000" x="0" y="85" width="41" height="41" frameX="0" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew left0001" x="41" y="85" width="40" height="41" frameX="0" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew left0002" x="105" y="41" width="34" height="41" frameX="-1" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew left0003" x="81" y="85" width="41" height="41" frameX="-1" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew left0004" x="143" y="0" width="40" height="41" frameX="-1" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew right0000" x="143" y="41" width="35" height="41" frameX="-6" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew right0001" x="143" y="82" width="34" height="41" frameX="-7" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew right0002" x="0" y="126" width="38" height="41" frameX="-7" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew right0003" x="38" y="126" width="35" height="41" frameX="-7" frameY="-4" frameWidth="45" frameHeight="48" />
+<SubTexture name="mewmew right0004" x="73" y="126" width="36" height="41" frameX="-7" frameY="-4" frameWidth="45" frameHeight="48" />
+</TextureAtlas>

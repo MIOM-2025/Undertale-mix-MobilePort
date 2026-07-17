@@ -1,0 +1,166 @@
+import flixel.tweens.FlxTweenType;
+
+var start = 610;
+var body:FlxSprite = new FlxSprite(start, -143).loadGraphic(Paths.image('dog/dogbody'), true, 22, 14);
+var legs:FlxSprite = new FlxSprite(body.x + 1, body.y + 14).loadGraphic(Paths.image('dog/doglegs'), true, 18, 5);
+var face:FlxSprite = new FlxSprite(body.x + 2, body.y + 4).loadGraphic(Paths.image('dog/dogface'), true, 6, 6);
+
+//Intro stuff.
+var walk:FlxTimer = new FlxTimer();
+var introCamera:FlxCamera = new FlxCamera();
+var walked = false;
+
+function create() {
+	//Intro stuff.
+	FlxG.cameras.add(introCamera, false);
+	introCamera.bgColor = FlxColor.TRANSPARENT;
+	introCamera.pixelPerfectRender = true;
+	introCamera.zoom = 4;
+	
+	for (cam in [camGame, camHUD]) {
+		cam.visible = false;
+	}
+	
+	//Body.
+	body.animation.add('idle', [0, 1], 0);
+	//Legs.
+	legs.animation.add('idle', [0, 1], 0);
+	legs.animation.add('still', [2], 0);
+	//Face.
+	face.animation.add('idle', [0, 1], 0);
+	face.animation.add('idle-alt', [2, 3], 0);
+	
+	for (part in [legs, body, face]) {
+		part.animation.play('idle', true);
+		part.antialiasing = false;
+		part.cameras = [introCamera];
+		insert(members.indexOf(boyfriend) - 1, part);
+	}
+	
+	//More intro stuff.
+	body.x = 1000;
+	body.screenCenter(FlxAxes.Y);
+	walk.start(0.07, function() {
+		walked = !walked;
+		legs.animation.curAnim.curFrame = (walked ? 0 : 1);
+		body.animation.curAnim.curFrame = (walked ? 0 : 1);
+	}, 0);
+	FlxTween.tween(body, {x: 629 - 10}, 1.4, {ease: FlxEase.quadOut, onComplete: function() {
+		FlxTween.tween(body, {x: 629}, 0.4, {ease: FlxEase.quadInOut, onComplete: function() {
+			intro = true;
+			startCountdown();
+			walk.cancel();
+		
+			canMove = false;
+			legs.animation.play('still', true);
+		}});
+	}});
+}
+
+var intro = false;
+function onStartCountdown(event) {
+	if (!intro) {
+		event.cancel();
+	}
+}
+
+var step = false;
+var canMove = true;
+function stepHit() {
+	if (canMove) {
+		step = !step;
+		legs.animation.curAnim.curFrame = (step ? 0 : 1);
+		body.animation.curAnim.curFrame = (step ? 0 : 1);
+	}
+}
+
+var dogAnim = 'idle';
+function onDadHit(event) {
+	dogAnim = (event.noteType == 'Alt Anim Note' ? 'idle-alt' : 'idle');
+}
+
+function postUpdate() {
+	legs.setPosition(body.x + 1, body.y + 14); face.setPosition(body.x + 2, body.y + 4);
+	legs.visible = body.visible; face.visible = body.visible;
+	
+	if (dad.animation.curAnim.name != 'idle') {
+		face.animation.play(dogAnim, true, false, (dad.animation.curAnim.curFrame == 0 ? 1 : 0));
+	}
+	// face.animation.curAnim.curFrame = 0;
+}
+
+var moveTween = null;
+var jumpTween = null;
+function onEvent(event) {
+	var name = event.event.name;
+	var params = event.event.params;
+	if (name == 'Toby Move') {
+		moveTween = FlxTween.tween(body, {x: start + 20}, (Conductor.crochet / 1000), {ease: FlxEase.quadInOut, type: FlxTweenType.PINGPONG});
+	} else if (name == 'Toby Jump') {
+		moveTween = FlxTween.tween(body, {x: body.x + 50}, (Conductor.crochet / 1000) * 2, {ease: FlxEase.quadInOut, type: FlxTweenType.PINGPONG});
+		jumpTween = FlxTween.tween(body, {y: body.y - 20}, 0.3, {ease: FlxEase.quintIn, type: FlxTweenType.PINGPONG});
+	} else if (name == 'Toby Stop') {
+		if (params[0]) {
+			moveTween.cancel();
+			start = 616;
+			moveTween = FlxTween.tween(body, {x: start}, 1, {ease: FlxEase.quadInOut});
+		}
+		jumpTween.cancel();
+		jumpTween = FlxTween.tween(body, {y: -142}, 1, {ease: FlxEase.quadInOut});
+	} else if (name == 'Transition Jump') {
+		if (moveTween != null) {
+			moveTween.cancel();
+		}
+		FlxTween.tween(body, {x: body.x + 50}, 1, {ease: FlxEase.quadInOut, onComplete: function() {
+			FlxTween.tween(body, {x: body.x - 100}, 2, {ease: FlxEase.quadInOut});
+			timer = new FlxTimer().start(0.3, function() {
+				FlxTween.tween(body, {y: body.y - 30}, 0.5, {ease: FlxEase.quadOut, onComplete: function() {
+					body.acceleration.set(-300, 400);
+					executeEvent({name: 'HScript Call', params: ['secretRoomTransition', '']});
+				}});
+			});
+		}});
+	} else if (name == 'Wipe Away Shrine') {
+		dapper();
+		
+		body.setPosition(710, -143);
+		body.acceleration.set(0, 0); body.velocity.set(0, 0);
+		
+		if (moveTween != null) {
+			moveTween.cancel();
+		}
+		FlxTween.tween(body, {x: 560}, 1.5, {ease: FlxEase.quadInOut});
+	} else if (name == 'Intro Zoom In') {
+		FlxTween.tween(introCamera, {zoom: 400}, 1, {ease: FlxEase.quadInOut, onComplete: function() {
+			for (part in [legs, body, face]) {
+				part.cameras = [camGame];
+			}
+			body.setPosition(start, -143);
+			legs.animation.play('idle', true);
+			canMove = true;
+			for (cam in [camGame, camHUD]) {
+				cam.visible = true;
+			}
+			introCamera.visible = false;
+			
+			camFollow.setPosition(body.getMidpoint().x, camFollow.y + 32);
+			camGame.snapToTarget();
+			camGame.zoom = 500;
+			FlxTween.tween(camFollow, {x: 570, y: -170}, 1, {ease: FlxEase.quadInOut});
+			FlxTween.tween(camGame, {zoom: 4}, 1, {ease: FlxEase.quadInOut});
+		}});
+	} else if (name == 'Temperate Ending') {
+		camFollow.setPosition(body.getMidpoint().x, camFollow.y + 32);
+		FlxTween.tween(camGame, {zoom: 6}, 2, {ease: FlxEase.quadInOut, onComplete: function() {
+			FlxTween.tween(camGame, {alpha: 0}, 2, {ease: FlxEase.quadInOut});
+		}});
+		defaultCamZoom = 6;
+	}
+}
+
+function dapper() {
+	body.loadGraphic(Paths.image('dog/dogbodyhat'), true, 24, 28);
+	body.offset.set(2, 7);
+	body.animation.add('idle', [0, 1], 0);
+	body.animation.play('idle', true);
+}

@@ -1,0 +1,99 @@
+import UndertaleText;
+import TypedBitmapText;
+import optiontypes.Slider;
+import funkin.backend.system.Controls.Control;
+import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.display.FlxBackdrop;
+
+var stateCamera:FlxCamera = new FlxCamera();
+
+//Visuals.
+var bg:FlxBackdrop;
+var chara:FlxSprite = new FlxSprite().loadGraphic();
+//Other.
+// var theme:FlxSound = FlxG.sound.load(Paths.music('sans'), Options.volumeMusic, true);
+var offsetSlider:Slider;
+var canExit:Bool = false;
+function create() {
+	FlxG.cameras.add(stateCamera, false);
+	stateCamera.bgColor = FlxColor.TRANSPARENT;
+	this.cameras = [stateCamera];
+	stateCamera.zoom = 4;
+	
+	// FlxG.sound.music.pause();
+
+	var v:Int = 10;
+	var tile:FlxSprite = FlxGridOverlay.create(15, 15, 30, 30, true, 0xFF68A8D8, 0xFF80D890);
+	bg = new FlxBackdrop(tile.pixels, FlxAxes.XY);
+	bg.alpha = 0.9;
+	bg.velocity.set(v, v);
+	// bg.cameras = [];
+	add(bg);
+	
+	chara.frames = Paths.getSparrowAtlas('options/chara');
+	chara.animation.addByPrefix('b', 'chara bop0', 11, false);
+	chara.animation.play('b');
+	chara.antialiasing = false;
+	chara.screenCenter();
+	add(chara);
+	
+	var currentOffset:UndertaleText = new UndertaleText(chara.x - 64, chara.y + 78, 'CURRENT OFFSET:', 'left', FlxG.width, 1, 'FFFF00', 'undertale-outline');
+	currentOffset.autoSize = true;
+	currentOffset.cameras = [stateCamera];
+	add(currentOffset);
+
+	var firstKey = controls.getKeyName(Control.ACCEPT, 0);
+	var seconKey = controls.getKeyName(Control.ACCEPT, 1);
+	var keys = (firstKey != null ? firstKey + (firstKey != null && seconKey != null ? ' or ' + seconKey : '') : 'any');
+	var tip:UndertaleText = new UndertaleText(currentOffset.x, currentOffset.y + currentOffset.height, 'Press ' + keys + ' to exit and save!', 'left', FlxG.width, 0.5, 'FFFFFF', 'undertale-outline');
+	tip.autoSize = true;
+	tip.updateHitbox();
+	tip.setPosition(currentOffset.x, (currentOffset.y + currentOffset.height) - 7.6);
+	// add(tip);
+	
+	offsetSlider = new Slider(0, 0, this, currentOffset, 'songOffset', 0, -999, 999, null, Options, null, 'ms');
+	offsetSlider.cameras = [stateCamera];
+	add(offsetSlider);
+
+	// theme.play();
+	// Conductor
+	FlxG.sound.playMusic(Paths.music('sans'), Options.volumeMusic, true);
+	Conductor.changeBPM(128);
+	
+	stateCamera.alpha = 0;
+	FlxTween.tween(stateCamera, {alpha: 1}, transitionTime, {ease: FlxEase.cubeInOut, onComplete: function() {
+		canExit = true;
+	}});
+	// FlxG.
+	// canExit = true;
+}
+
+var lastBeat:Int = 0;
+var beat:Int = 0;
+var transitionTime:Float = 0.1;
+function update() {
+	// Conductor.songPosition = FlxG.sound.music.time;
+	
+	
+	if (controls.BACK) {
+		FlxTween.tween(stateCamera, {alpha: 0}, transitionTime, {ease: FlxEase.cubeInOut, onComplete: function() {
+			close();
+			FlxG.sound.playMusic(Paths.music('menuthemes/mainmenu'), 1, true);
+		}});
+	}
+
+	beat = Conductor.getBeats(0, 2, 0);
+	if (lastBeat != beat) {
+		stateCamera.zoom += 0.1;
+		chara.animation.play('b', true);
+		
+		lastBeat = beat;
+	}
+	stateCamera.zoom = CoolUtil.fpsLerp(stateCamera.zoom, 4, 0.025);
+	
+	Conductor.songOffset = offsetSlider.currentValue;
+}
+
+// function onBeatHit() {
+// chara.animation.play('b', true);
+// }

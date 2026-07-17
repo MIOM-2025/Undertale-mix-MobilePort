@@ -1,0 +1,342 @@
+import UndertaleText;
+import NoteRating;
+import funkin.backend.system.Controls.Control;
+import flixel.addons.display.FlxGridOverlay;
+import flixel.addons.display.FlxBackdrop;
+
+// Cameras
+var stateCamera:FlxCamera = new FlxCamera();
+var comboCamera:FlxCamera = new FlxCamera();
+// Ratings stuff
+var rating:NoteRating = new NoteRating(100, 100, 'sick', 'ratings', 'ut', 'aseprite', 1.5);
+var ratingPosition:UndertaleText = new UndertaleText(rating.x, rating.y, '(0, 0)', 'left', FlxG.width, 2, 'FFFFFF', 'undertale-outline');
+var ratingDefault:Array<Int> = [254, 266];
+var combo:NoteRating = new NoteRating(100, 150, '0', 'ratings', 'ut', 'aseprite', 1.5);
+var comboPosition:UndertaleText = new UndertaleText(combo.x, combo.y, '(0, 0)', 'left', FlxG.width, 2, 'FFFFFF', 'undertale-outline');
+var comboDefault:Array<Int> = [254, 331];
+// Other
+var tip:UndertaleText;
+// ---------- 返回按钮 ----------
+var uiCamera:FlxCamera;
+var backBtn:FlxSprite;
+// ---------- 新按钮：重置与设置 ----------
+var restartBtn:FlxSprite;
+var settingsBtn:FlxSprite;
+
+// ---------- 拖拽相关 ----------
+var dragOffsetX:Float = 0;
+var dragOffsetY:Float = 0;
+
+function create() {
+	// 1. 背景层
+	FlxG.cameras.add(stateCamera, false);
+	stateCamera.bgColor = FlxColor.TRANSPARENT;
+	this.cameras = [stateCamera];
+	stateCamera.zoom = 4;
+
+	var v:Int = 10;
+	var tile:FlxSprite = FlxGridOverlay.create(15, 15, 30, 30, true, 0xFF882B43, 0xFF6C2244);
+	bg = new FlxBackdrop(tile.pixels, FlxAxes.XY);
+	bg.alpha = 1;
+	bg.velocity.set(v, v);
+	add(bg);
+
+	// 2. 返回按钮层（中间）
+	uiCamera = new FlxCamera();
+	uiCamera.bgColor = FlxColor.TRANSPARENT;
+	uiCamera.zoom = 1;
+	uiCamera.antialiasing = false;
+	uiCamera.alpha = 1;
+	FlxG.cameras.add(uiCamera, false);
+
+	// ---- 左上角返回 ----
+	backBtn = new FlxSprite().loadGraphic(Paths.image('freeplay/backspace'));
+	backBtn.antialiasing = false;
+	backBtn.scale.set(6, 6); // 这个保持原样，用户没要求改
+	backBtn.updateHitbox();
+	backBtn.setPosition(10, 10);
+	backBtn.cameras = [uiCamera];
+	add(backBtn);
+
+	// ---- 右下角重置 & 设置（缩放为1倍） ----
+	restartBtn = new FlxSprite().loadGraphic(Paths.image('pause/restart'));
+	restartBtn.antialiasing = false;
+	restartBtn.scale.set(1, 1); // 1倍
+	restartBtn.updateHitbox();
+	settingsBtn = new FlxSprite().loadGraphic(Paths.image('pause/settings'));
+	settingsBtn.antialiasing = false;
+	settingsBtn.scale.set(1, 1); // 1倍
+	settingsBtn.updateHitbox();
+
+	// 计算位置：设置按钮右边缘距右边缘2px，下边缘距下边缘1px
+	var setX:Float = FlxG.width - 2 - settingsBtn.width;
+	var setY:Float = FlxG.height - 1 - settingsBtn.height;
+	settingsBtn.setPosition(setX, setY);
+
+	// 重置按钮在设置左边，间隔2px
+	var resX:Float = setX - 2 - restartBtn.width;
+	var resY:Float = FlxG.height - 1 - restartBtn.height;
+	restartBtn.setPosition(resX, resY);
+
+	restartBtn.cameras = [uiCamera];
+	settingsBtn.cameras = [uiCamera];
+	add(restartBtn);
+	add(settingsBtn);
+
+	// 3. 评级/连击/提示层（最上层）
+	FlxG.cameras.add(comboCamera, false);
+	comboCamera.bgColor = FlxColor.TRANSPARENT;
+
+	// 提示文字（缩小，左下角留 3 像素）
+	tip = new UndertaleText(0, 0, '1. Press [R] to reset\n   positions back to default.\n2. Press [TAB] to open\n   rating specific options.', 'left', FlxG.width, 1, 'FFFFFF', 'undertale-outline');
+	tip.autoSize = true;
+	tip.updateHitbox();
+	var firstKey = controls.getKeyName(Control.BACK, 0);
+	var seconKey = controls.getKeyName(Control.BACK, 1);
+	tip.text = tip.text + '\n3. Press [' + firstKey + '] or [' + seconKey + '] to exit.';
+	tip.autoSize = true;
+	tip.updateHitbox();
+	tip.setPosition(3, FlxG.height - tip.height - 3);
+	tip.cameras = [comboCamera];
+	add(tip);
+
+	// 评级和连击（后添加，覆盖提示文字）
+	rating.cameras = [comboCamera];
+	add(rating);
+
+	ratingPosition.autoSize = true;
+	ratingPosition.updateHitbox();
+	ratingPosition.cameras = [comboCamera];
+	add(ratingPosition);
+
+	combo.cameras = [comboCamera];
+	add(combo);
+
+	comboPosition.autoSize = true;
+	comboPosition.updateHitbox();
+	comboPosition.cameras = [comboCamera];
+	add(comboPosition);
+
+	FlxG.mouse.visible = true;
+
+	// 读取保存的位置
+	var ratingSavedPositions:Array<Int> = FlxG.save.data.ratingPositions;
+	if (FlxG.save.data.ratingPositions == null) {
+		FlxG.save.data.ratingPositions = [ratingDefault[0], ratingDefault[1]];
+		ratingSavedPositions = FlxG.save.data.ratingPositions;
+	}
+	rating.setPosition(ratingSavedPositions[0], ratingSavedPositions[1]);
+
+	var comboSavedPositions:Array<Int> = FlxG.save.data.comboPositions;
+	if (FlxG.save.data.comboPositions == null) {
+		FlxG.save.data.comboPositions = [comboDefault[0], comboDefault[1]];
+		comboSavedPositions = FlxG.save.data.comboPositions;
+	}
+	combo.setPosition(comboSavedPositions[0], comboSavedPositions[1]);
+
+	updatePositions();
+
+	// 入场动画
+	stateCamera.alpha = 0;
+	FlxTween.tween(stateCamera, {alpha: 1}, transitionTime, {ease: FlxEase.cubeInOut, onComplete: function() {
+		canExit = true;
+	}});
+}
+
+var canExit:Bool = false;
+var transitionTime:Float = 0.1;
+var heldObject:NoteRating;
+var movingWithMouse:Bool = false;
+
+function update() {
+	if (this.substate != null) return;
+
+	// ========== 拖拽处理（优先级最高） ==========
+	if (movingWithMouse) {
+		uiCamera.alpha = 0.3; // 整个按钮层半透明
+		var mouseWorld = FlxG.mouse.getWorldPosition(comboCamera);
+		heldObject.setPosition(mouseWorld.x - dragOffsetX, mouseWorld.y - dragOffsetY);
+		if (FlxG.mouse.justReleased) {
+			uiCamera.alpha = 1;
+			FlxTween.tween(tip, {alpha: 1}, 0.1);
+			FlxG.save.data.ratingPositions = [rating.x, rating.y];
+			FlxG.save.data.comboPositions = [combo.x, combo.y];
+			FlxG.save.flush();
+			movingWithMouse = false;
+		}
+		updatePositions();
+		return; // 拖拽时忽略其他输入
+	}
+
+	// ========== 非拖拽状态 ==========
+	uiCamera.alpha = 1;
+
+	// ---------- 返回按钮交互 ----------
+	var mousePoint = FlxG.mouse.getWorldPosition(uiCamera);
+	var isHoverBack = backBtn.overlapsPoint(mousePoint, false, uiCamera);
+	backBtn.color = isHoverBack ? FlxColor.YELLOW : FlxColor.WHITE;
+	if (FlxG.mouse.justReleased && isHoverBack) {
+		FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+		close();
+		return;
+	}
+
+	// ---------- 重置按钮交互（重置位置到默认） ----------
+	var isHoverRestart = restartBtn.overlapsPoint(mousePoint, false, uiCamera);
+	restartBtn.color = isHoverRestart ? FlxColor.YELLOW : FlxColor.WHITE;
+	if (FlxG.mouse.justReleased && isHoverRestart) {
+		FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+		// 重置评级和连击位置到默认
+		FlxG.save.data.ratingPositions = [ratingDefault[0], ratingDefault[1]];
+		FlxG.save.data.comboPositions = [comboDefault[0], comboDefault[1]];
+		rating.setPosition(FlxG.save.data.ratingPositions[0], FlxG.save.data.ratingPositions[1]);
+		combo.setPosition(FlxG.save.data.comboPositions[0], FlxG.save.data.comboPositions[1]);
+		FlxG.save.flush();
+		updatePositions();
+		FlxTween.tween(tip, {alpha: 1}, 0.1);
+		return;
+	}
+
+	// ---------- 设置按钮交互（打开设置子菜单） ----------
+	var isHoverSettings = settingsBtn.overlapsPoint(mousePoint, false, uiCamera);
+	settingsBtn.color = isHoverSettings ? FlxColor.YELLOW : FlxColor.WHITE;
+	if (FlxG.mouse.justReleased && isHoverSettings) {
+		FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+		// 打开与 TAB 键相同的设置子状态
+		openSubState(new ModSubState('OptionSubstateSubstate', [
+			{
+				type: 'checkbox',
+				title: 'Display Ratings',
+				description: '*If unchecked, ratings will/ñnot appear on note hit.',
+				defaultValue: true,
+				parentValue: 'displayRating'
+			},
+			{
+				type: 'checkbox',
+				title: 'Display Combo',
+				description: '*If unchecked, your current/ñcombo will not appear on/ñnote hit.',
+				defaultValue: true,
+				parentValue: 'displayCombo'
+			},
+			{
+				type: 'slider',
+				title: 'Fade Delay',
+				description: '*Amount of time in seconds the/ñrating or combo should be on/ñscreen before fading.',
+				defaultValue: 0.1,
+				parentValue: 'comboFadeDelay',
+				min: 0,
+				max: 1,
+				valueSuffix: ' s',
+				valueStep: 0.1
+			},
+			{
+				type: 'slider',
+				title: 'Combo Cache',
+				description: '*Amount pre-created ratings/ñfor the game to reuse./ñMay help with any initial lag.',
+				defaultValue: 4,
+				parentValue: 'comboCache',
+				valueSuffix: ' objects',
+				max: 176,
+				min: 4
+			},
+			{
+				type: 'checkbox',
+				title: 'Ratings Over Notes',
+				description: '*If checked, ratings appear/ñover hud elements and notes.',
+				defaultValue: false,
+				parentValue: 'ratingsOnTop'
+			}
+		]));
+		return;
+	}
+
+	// ---------- 键盘快捷键 ----------
+	if (FlxG.keys.justPressed.TAB) {
+		openSubState(new ModSubState('OptionSubstateSubstate', [
+			{
+				type: 'checkbox',
+				title: 'Display Ratings',
+				description: '*If unchecked, ratings will/ñnot appear on note hit.',
+				defaultValue: true,
+				parentValue: 'displayRating'
+			},
+			{
+				type: 'slider',
+				title: 'Fade Delay',
+				description: '*Amount of time in seconds the/ñrating or combo should be on/ñscreen before fading.',
+				defaultValue: 0.1,
+				parentValue: 'comboFadeDelay',
+				min: 0,
+				max: 1,
+				valueSuffix: ' s',
+				valueStep: 0.1
+			},
+			{
+				type: 'slider',
+				title: 'Combo Cache',
+				description: '*Amount pre-created ratings/ñfor the game to reuse./ñMay help with any initial lag.',
+				defaultValue: 4,
+				parentValue: 'comboCache',
+				valueSuffix: ' objects',
+				max: 176,
+				min: 4
+			},
+			{
+				type: 'checkbox',
+				title: 'Ratings Over Notes',
+				description: '*If checked, ratings appear/ñover hud elements and notes.',
+				defaultValue: false,
+				parentValue: 'ratingsOnTop'
+			}
+		]));
+	}
+	if (FlxG.keys.justPressed.R) {
+		movingWithMouse = false;
+		FlxTween.tween(tip, {alpha: 1}, 0.1);
+		FlxG.save.data.ratingPositions = [ratingDefault[0], ratingDefault[1]];
+		FlxG.save.data.comboPositions = [comboDefault[0], comboDefault[1]];
+		rating.setPosition(FlxG.save.data.ratingPositions[0], FlxG.save.data.ratingPositions[1]);
+		combo.setPosition(FlxG.save.data.comboPositions[0], FlxG.save.data.comboPositions[1]);
+		FlxG.save.flush();
+		updatePositions();
+	}
+
+	// ---------- 鼠标点击开始拖拽 ----------
+	if (FlxG.mouse.justPressed) {
+		heldObject = isHoveringWho();
+		if (heldObject != null) {
+			movingWithMouse = true;
+			var mouseWorld = FlxG.mouse.getWorldPosition(comboCamera);
+			dragOffsetX = mouseWorld.x - heldObject.x;
+			dragOffsetY = mouseWorld.y - heldObject.y;
+			FlxTween.tween(tip, {alpha: 0.4}, 0.1);
+		}
+	}
+
+	// ---------- 键盘退出 ----------
+	if (controls.BACK && canExit) {
+		FlxTween.tween(stateCamera, {alpha: 0}, transitionTime, {ease: FlxEase.cubeInOut, onComplete: function() {
+			close();
+		}});
+	}
+}
+
+function postUpdate() {
+	if (movingWithMouse) updatePositions();
+}
+
+function updatePositions() {
+	ratingPosition.setPosition(rating.x + 15, rating.y + 38);
+	ratingPosition.text = '(' + rating.x + ', ' + rating.y + ')';
+	comboPosition.setPosition(combo.x + 15, combo.y + 38);
+	comboPosition.text = '(' + combo.x + ', ' + combo.y + ')';
+}
+
+function isHoveringWho() {
+	for (object in [rating, combo]) {
+		if (object.overlapsPoint(FlxG.mouse.getPosition(), true, comboCamera)) {
+			return object;
+		}
+	}
+	return null;
+}

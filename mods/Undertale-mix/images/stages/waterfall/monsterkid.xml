@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="monsterkid.png" width="20" height="137">
+	<SubTexture name="agoner0000" x="0" y="84" width="19" height="27" frameX="-1" frameY="-0" frameWidth="21" frameHeight="27"/>
+	<SubTexture name="agoner0001" x="0" y="0" width="20" height="27" frameX="-0" frameY="-0" frameWidth="21" frameHeight="27"/>
+	<SubTexture name="idle0000" x="0" y="28" width="20" height="27" frameX="-0" frameY="-0" frameWidth="21" frameHeight="27"/>
+	<SubTexture name="idle0001" x="0" y="112" width="20" height="25" frameX="-1" frameY="-2" frameWidth="21" frameHeight="27"/>
+	<SubTexture name="idle0002" x="0" y="56" width="20" height="27" frameX="-1" frameY="-0" frameWidth="21" frameHeight="27"/>
+	<SubTexture name="idle0003" x="0" y="28" width="20" height="27" frameX="-0" frameY="-0" frameWidth="21" frameHeight="27"/>
+</TextureAtlas>

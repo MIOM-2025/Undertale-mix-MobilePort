@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="tonyearth" antialiasing="false" camx="-152" camy="102" icon="toby-hat" color="#000000">
+	<anim name="idle" anim="idle" fps="8"/>
+	<anim name="singDOWN" anim="down" x="2" y="-1" fps="8"/>
+	<anim name="singRIGHT" anim="right" x="-7" y="1" fps="8"/>
+	<anim name="singLEFT" anim="left" y="1" fps="8"/>
+	<anim name="singUP" anim="up" x="3" y="-1" fps="8"/>
+</character>

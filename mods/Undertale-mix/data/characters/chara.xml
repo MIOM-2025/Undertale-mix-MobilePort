@@ -1,0 +1,13 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="chara_vidontknowatthispoint" antialiasing="false" camx="-136" camy="92" color="#29A748">
+	<anim name="idle" anim="idle0" fps="8"/>
+	<anim name="singDOWN" anim="down0" fps="8"/>
+	<anim name="singRIGHT" anim="right0" fps="8"/>
+	<anim name="singLEFT" anim="left0" fps="8"/>
+	<anim name="singUP" anim="up0" fps="8"/>
+	<anim name="idle-alt" anim="idlealt"/>
+	<anim name="singLEFT-alt" anim="leftalt"/>
+	<anim name="singDOWN-alt" anim="downalt"/>
+	<anim name="singUP-alt" anim="upalt"/>
+	<anim name="singRIGHT-alt" anim="rightalt"/>
+</character>

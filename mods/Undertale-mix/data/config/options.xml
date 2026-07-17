@@ -1,0 +1,16 @@
+<menu name="Mod Options" desc="Options that are for the mod.">
+    <checkbox id = "southernSeasons" name = "Southern Seasons" desc = "If this is checked the game will use the southern hemisphere season order rather than the northern one."/>
+	<checkbox id = "seasonParticles" name = "Disable Particles" desc = "Pretty self explanatory, if this is checked then the particles you see in the main menu will not appear in the song, turn this on if you experience lag spikes which may be related to this."/>
+	<choice id = "soulColor" name = "Soul Trait" desc = "Whenever the soul appears it will appear in the selected trait and it's respective color.">
+		<value name = "Determination" value = "determination"/>
+		<value name = "Patience" value = "patience"/>
+		<value name = "Bravery" value = "bravery"/>
+		<value name = "Integrity" value = "integrity"/>
+		<value name = "Perseverance" value = "perseverance"/>
+		<value name = "Kindness" value = "kindness"/>
+		<value name = "Justice" value = "justice"/>
+	</choice>
+	<checkbox id = "killFrisk" name = "Kill Frisk" desc = "if you want to kill frisk you lame fucking bitch"/>
+	<checkbox id = "haveBotPlay" name = "Botplay" desc = "ok why isnt this a feature in base codename man"/>
+	<checkbox id = "disableHudScript" name = "Disable Hud Script" desc = "i couldnt get this to work?? lol"/>
+</menu>
