@@ -1,6 +1,10 @@
 import Reflect;
 import funkin.backend.system.Controls;
 import funkin.options.PlayerSettings;
+import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.util.FlxColor;
+import flixel.math.FlxPoint;
 
 class Checkbox extends FlxSprite {
 	var parentObject:Dynamic;
@@ -33,10 +37,14 @@ class Checkbox extends FlxSprite {
 		parentValue = pv;
 		defaultValue = dv;
 		
+		// 读取保存值，若不存在则写入默认值
 		currentValue = Reflect.field(saveState, parentValue);
 		if (currentValue == null) {
+			// 先确保 currentValue 是默认值（布尔类型）
+			currentValue = defaultValue;
 			Reflect.setField(saveState, parentValue, defaultValue);
 		}
+		// 现在 currentValue 不会是 null，可以安全赋给 checked
 		checked = currentValue;
 		animation.play((!checked ? 'checking' : 'unchecking'), true);
 		offset.x = 11;

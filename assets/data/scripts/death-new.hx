@@ -131,6 +131,16 @@ function update(elapsed:Float) {
 	}
 	
 	if (canPress) {
+		// --- 新增：点击屏幕触发与 ACCEPT 相同的行为 ---
+		if (FlxG.mouse.justPressed) {
+			if (deathDialogue.active) {
+				deathDialogue.advanceDialogue();
+			} else {
+				endScreen(false);
+			}
+		}
+		// ------------------------------------------------
+		
 		if (controls.ACCEPT) {
 			if (deathDialogue.active) {
 				deathDialogue.advanceDialogue();

@@ -2,6 +2,7 @@ import funkin.backend.system.Flags;
 import funkin.backend.utils.DiscordUtil;
 import funkin.options.OptionsMenu;
 import funkin.backend.system.Controls.Control;
+import funkin.options.Options; // 添加，用于音量控制
 
 import flixel.util.FlxStringUtil;
 import flixel.input.mouse.FlxMouseEvent;
@@ -389,6 +390,8 @@ function update(elapsed:Float) {
 			if (newHover != null) {
 				newHover.color = FlxColor.YELLOW;
 				curSelected = newHover.ID;
+				// ★★★ 新增：悬停时播放与歌曲切换相同的音效 ★★★
+				FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
 			} else {
 				curSelected = getFirstVisibleIndex();
 			}

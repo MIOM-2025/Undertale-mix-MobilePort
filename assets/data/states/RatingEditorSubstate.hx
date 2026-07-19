@@ -52,23 +52,24 @@ function create() {
 	// ---- 左上角返回 ----
 	backBtn = new FlxSprite().loadGraphic(Paths.image('freeplay/backspace'));
 	backBtn.antialiasing = false;
-	backBtn.scale.set(6, 6); // 这个保持原样，用户没要求改
+	backBtn.scale.set(6, 6); // 保持原样
 	backBtn.updateHitbox();
 	backBtn.setPosition(10, 10);
 	backBtn.cameras = [uiCamera];
 	add(backBtn);
 
-	// ---- 右下角重置 & 设置（缩放为1倍） ----
+	// ---- 右下角重置 & 设置（缩放改为1.6倍，与freeplay菜单按钮一致） ----
 	restartBtn = new FlxSprite().loadGraphic(Paths.image('pause/restart'));
 	restartBtn.antialiasing = false;
-	restartBtn.scale.set(1, 1); // 1倍
+	restartBtn.scale.set(1.6, 1.6); // ★ 修改为1.6倍
 	restartBtn.updateHitbox();
+
 	settingsBtn = new FlxSprite().loadGraphic(Paths.image('pause/settings'));
 	settingsBtn.antialiasing = false;
-	settingsBtn.scale.set(1, 1); // 1倍
+	settingsBtn.scale.set(1.6, 1.6); // ★ 修改为1.6倍
 	settingsBtn.updateHitbox();
 
-	// 计算位置：设置按钮右边缘距右边缘2px，下边缘距下边缘1px
+	// 重新计算位置：设置按钮右边缘距屏幕右边缘2px，下边缘距下边缘1px
 	var setX:Float = FlxG.width - 2 - settingsBtn.width;
 	var setY:Float = FlxG.height - 1 - settingsBtn.height;
 	settingsBtn.setPosition(setX, setY);

@@ -9,8 +9,8 @@
 
 	<app
 		title="Codename Engine Mobile" main="funkin.backend.system.Main"
-		file="CodenameEngine" packageName="com.yoshman29.codenameengine"
-		package="com.yoshman29.codenameengine"
+		file="CodenameEngine" packageName="com.undertale.mix.miom.mobileuiport"
+		package="com.undertale.mix.miom.mobileuiport"
 		version="1.0.1" company="Yoshman29" />
 
 	<!--

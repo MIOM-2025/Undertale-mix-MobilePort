@@ -80,7 +80,6 @@ var currentSelection:Int = 0;
 var themeVolume:Float = 1;
 var theme:FlxSound;
 var previewTheme:FlxSound;
-var oppMode:Bool = false;
 
 // ========== 键盘/触摸模式管理 ==========
 var inputMode:String = "keyboard";
@@ -105,6 +104,9 @@ function setMechanicsHighlight(highlight:Bool) {
     if (mechanics != null) mechanics.color = highlight ? FlxColor.YELLOW : FlxColor.WHITE;
     if (checkbox != null) checkbox.color = highlight ? FlxColor.YELLOW : FlxColor.WHITE;
 }
+
+// ★★★ week 闪烁计时器 ★★★
+var weekFlashTimer:FlxTimer;
 
 function create() {
 	FlxG.cameras.add(camera, false);
@@ -167,8 +169,10 @@ function create() {
 		lines.push(line);
 	}
 	
+	// ★★★ week：不透明，白色，悬停不变色 ★★★
 	week = new UndertaleText(71, background.y + 5, '< Week Name >', 'center', FlxG.width, 0.5, 'FFFFFF', 'wonder');
-	week.alpha = 0.5;
+	week.alpha = 1;
+	week.color = FlxColor.WHITE;
 	add(week);
 	
 	tip.autoSize = true;
@@ -248,13 +252,6 @@ function create() {
 		currentCategory = FlxG.save.data.lastFreeplayCategory;
 	}
 	updateCategory();
-	
-	if (FlxG.save.data.gameOpponentMode != null) {
-		oppMode = FlxG.save.data.gameOpponentMode;
-	} else if (FlxG.save.data.gameOpponentMode == null) {
-		FlxG.save.data.gameOpponentMode = false;
-		oppMode = false;
-	}
 	
 	// 启动进入动画（所有需要淡入的元素一开始设为透明）
 	menuTransition(false);
@@ -463,6 +460,33 @@ function update(elapsed:Float) {
 				}
 			}
 		}
+		
+		// ★★★ 处理 week 点击（无悬停变黄，仅闪烁）★★★
+		if (week != null && week.visible && !checkingBox && !(createdWarningStuff && warningStuff[0].visible)) {
+			var mouseWorldMain = FlxG.mouse.getWorldPosition(camera);
+			var overlapping = week.overlapsPoint(mouseWorldMain, true);
+			var mouseScreenX = FlxG.mouse.screenX;
+			var isRightHalf = mouseScreenX > FlxG.width * 0.5;
+			
+			// 点击处理：必须右半部分，且闪烁计时器未激活
+			if (FlxG.mouse.justReleased && overlapping && isRightHalf) {
+				if (weekFlashTimer == null || !weekFlashTimer.active) {
+					// 允许切换
+					FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
+					// 闪烁：立即变黄
+					week.color = FlxColor.YELLOW;
+					if (weekFlashTimer != null) weekFlashTimer.cancel();
+					weekFlashTimer = new FlxTimer().start(0.1, function(_) {
+						week.color = FlxColor.WHITE;
+						weekFlashTimer = null;
+					});
+					// 切换分类
+					updateCategory(1);
+				} else {
+					// 闪烁期间点击：忽略（回绝），不执行任何操作
+				}
+			}
+		}
 	}
 	
 	if (inGameplaySubstate) {
@@ -533,16 +557,6 @@ function update(elapsed:Float) {
 		var mouseWorldSong = FlxG.mouse.getWorldPosition(songCamera);
 		var leftDeadZone = FlxG.width * 0.35;
 		var mouseScreenX = FlxG.mouse.screenX;
-		
-		if (FlxG.mouse.justReleased) {
-			var mouseWorldMain = FlxG.mouse.getWorldPosition(camera);
-			if (week.visible && week.overlapsPoint(mouseWorldMain, true)) {
-				updateCategory(1);
-				FlxG.sound.play(Paths.sound('squeak'), Options.volumeSFX);
-				touchSelectedID = -1;
-				return;
-			}
-		}
 		
 		var isLeftRegion = mouseScreenX < leftDeadZone;
 		var newHover:UndertaleText = null;
@@ -647,10 +661,6 @@ function updateCategory(?v:Int) {
 		} else if (currentCategory < 0) {
 			currentCategory = loadedWeeks.length - 1;
 		}
-		
-		if (week != null) {
-			FlxTween.tween(week, {alpha: 0}, 0.15, {ease: FlxEase.cubeInOut});
-		}
 	}
 	
 	currentWeek = loadedWeeks[currentCategory];
@@ -697,11 +707,14 @@ function updateCategory(?v:Int) {
 		index++;
 	}
 	
+	// ★★★ 更新文本，颜色置为白色（不影响闪烁状态）★★★
 	if (week != null) {
 		week.text = '< ' + currentWeek.categoryName.toLowerCase() + ' >';
-		if (v != null) {
-			FlxTween.tween(week, {alpha: 0.5}, 0.15, {ease: FlxEase.cubeInOut});
+		// 如果闪烁计时器未激活，才设为白色；否则保持黄色（但闪烁期间不允许切换，所以不会发生）
+		if (weekFlashTimer == null || !weekFlashTimer.active) {
+			week.color = FlxColor.WHITE;
 		}
+		week.alpha = 1;
 	}
 	
 	DiscordUtil.changePresenceAdvanced({
@@ -792,7 +805,6 @@ function updateAllButtonsVisibility() {
 			settingsSubBtn.alpha = (songExists ? 1 : 0.5);
 		}
 	}
-	// 机制组可见性由 boxVisibility 统一控制，这里不再单独设置
 	if (exitSubBtn != null) exitSubBtn.visible = !warnVisible && checkingBox;
 }
 
@@ -1184,11 +1196,15 @@ function startFadeOutAndSwitch() {
 	}
 	
 	new FlxTimer().start(0.35, function(_) {
+		// ★★★ 读取当前歌曲专属的对手模式设置 ★★★
+		var oppModeSaved = Reflect.field(FlxG.save.data, currentSong.song + '_gameOpponentMode');
+		var finalOppMode = (oppModeSaved != null) ? oppModeSaved : false;
+		
 		if (songExists) {
 			Options.freeplayLastSong = currentSong.song;
 			Options.freeplayLastDifficulty = 'normal';
 			Options.freeplayLastVariation = '';
-			PlayState.loadSong(currentSong.song, 'normal', FlxG.save.data.gameOpponentMode, false);
+			PlayState.loadSong(currentSong.song, 'normal', finalOppMode, false);
 			FlxG.switchState(new PlayState());
 		} else {
 			switch(currentSong.song) {
@@ -1200,7 +1216,7 @@ function startFadeOutAndSwitch() {
 					Options.freeplayLastSong = currentSong.song;
 					Options.freeplayLastDifficulty = 'normal';
 					Options.freeplayLastVariation = '';
-					PlayState.loadSong(currentSong.song, 'normal', FlxG.save.data.gameOpponentMode, false);
+					PlayState.loadSong(currentSong.song, 'normal', finalOppMode, false);
 					FlxG.switchState(new PlayState());
 			}
 		}
@@ -1221,18 +1237,20 @@ function toggleMechanics() {
 }
 
 function openSongSettings() {
-	if (!fileExists) return;
-	if (!songExists) return;
+	if (!fileExists || !songExists) return;
 
 	lockObj.isSS = true;
 
+	var songKey = currentSong.song;
+
+	// 动态构建设置项，每个 parentValue 都使用歌曲专属字段
 	var configArray:Array<Dynamic> = [
 		{
 			type: 'choice',
 			title: 'Scroll Type',
 			description: '*If the scroll speed value/ñshould multiply or replace/ñthe song\'s scroll speed.',
 			defaultValue: 0,
-			parentValue: 'gameScrollType',
+			parentValue: songKey + '_gameScrollType',
 			choices: ['multiplicative', 'constant']
 		},
 		{
@@ -1240,7 +1258,7 @@ function openSongSettings() {
 			title: 'Scroll Speed',
 			description: '*Your scroll speed.',
 			defaultValue: 1,
-			parentValue: 'gameScrollSpeed',
+			parentValue: songKey + '_gameScrollSpeed',
 			min: 0.1,
 			max: 6,
 			valueStep: 0.05
@@ -1250,7 +1268,7 @@ function openSongSettings() {
 			title: 'Health Gain Multiplier',
 			description: '*The value your health won/ñwhen hitting a note is/ñmultiplied by.',
 			defaultValue: 1,
-			parentValue: 'gameHealthGainMult',
+			parentValue: songKey + '_gameHealthGainMult',
 			valueSuffix: 'x',
 			max: 5,
 			min: 0.1,
@@ -1261,7 +1279,7 @@ function openSongSettings() {
 			title: 'Health Loss Multiplier',
 			description: '*The value your health lost/ñwhen missing a note is/ñmultiplied by.',
 			defaultValue: 1,
-			parentValue: 'gameHealthLossMult',
+			parentValue: songKey + '_gameHealthLossMult',
 			valueSuffix: 'x',
 			max: 5,
 			min: 0.1,
@@ -1272,14 +1290,14 @@ function openSongSettings() {
 			title: 'Instakill on Miss',
 			description: '*If you miss you die.',
 			defaultValue: false,
-			parentValue: 'missInstaKill'
+			parentValue: songKey + '_missInstaKill'
 		},
 		{
 			type: 'checkbox',
 			title: 'Opponent Mode',
 			description: '*If checked, you play on the/ñopponent side instead of the/ñplayer side.',
 			defaultValue: false,
-			parentValue: 'gameOpponentMode'
+			parentValue: songKey + '_gameOpponentMode'
 		}
 	];
 
