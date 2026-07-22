@@ -1,25 +1,24 @@
 import funkin.savedata.FunkinSave;
 
-// 玩家修改的设置
+// 玩家修改的设置（仅歌曲解锁后生效）
 var userScrollSpeed:Float = 1;
 var scrollType:String = 'multiplicative';
 var healthGainMult:Float = 1;
 var healthLossMult:Float = 1;
 var missInstaKill:Bool = false;
-var botplayEnabled:Bool = false;          // Botplay flag, per-song
-var middleScrollLoaded:Bool = false;      // MiddleScroll 脚本加载标记
+var botplayEnabled:Bool = false;
 
 var songExists:Bool = false;
-var botplayLoaded:Bool = false;          // Avoid loading the bot script multiple times
+var botplayLoaded:Bool = false;
+var middleScrollLoaded:Bool = false;    // MiddleScroll 脚本加载标记
 
 function create() {
     var songName = PlayState.SONG.meta.name;
     songExists = FunkinSave.getSongHighscore(songName, 'normal').date != null;
 
     if (songExists) {
-        // 读取当前歌曲的专属设置（字段名为 "歌曲名_变量名"）
         var prefix = songName + '_';
-        
+
         if (Reflect.hasField(FlxG.save.data, prefix + 'gameScrollType'))
             scrollType = Reflect.field(FlxG.save.data, prefix + 'gameScrollType');
         else
@@ -45,48 +44,42 @@ function create() {
         else
             missInstaKill = false;
 
-        // Read per-song botplay setting
         if (Reflect.hasField(FlxG.save.data, prefix + 'botplay'))
             botplayEnabled = Reflect.field(FlxG.save.data, prefix + 'botplay');
         else
             botplayEnabled = false;
     }
-    // If song is not unlocked, all settings remain at defaults (already set)
 }
 
 function postCreate() {
-    if (!songExists)
-        return;
-
-    if (scrollType == 'multiplicative') {
-        scrollSpeed *= userScrollSpeed;
-    } else {
-        scrollSpeed = userScrollSpeed;
-    }
-
-    // Load botplay script if enabled and not already loaded
-    if (botplayEnabled && !botplayLoaded) {
-        importScript("data/scripts/botplay");
-        botplayLoaded = true;
-    }
-
-    // Load MiddleScroll script if the save data option is enabled
-    // Now reading from FlxG.save.data instead of Options
+    // ===== MiddleScroll 全局生效，不依赖歌曲解锁 =====
     if (FlxG.save.data.middleScroll != null && FlxG.save.data.middleScroll && !middleScrollLoaded) {
         importScript("data/scripts/MiddleScroll");
         middleScrollLoaded = true;
     }
+
+    // ===== Botplay 仍然仅歌曲解锁后生效 =====
+    if (songExists) {
+        if (scrollType == 'multiplicative') {
+            scrollSpeed *= userScrollSpeed;
+        } else {
+            scrollSpeed = userScrollSpeed;
+        }
+
+        if (botplayEnabled && !botplayLoaded) {
+            importScript("data/scripts/botplay");
+            botplayLoaded = true;
+        }
+    }
 }
 
 function onPlayerHit(e) {
-    if (!songExists)
-        return;
+    if (!songExists) return;
     e.healthGain *= healthGainMult;
 }
 
 function onPlayerMiss(e) {
-    if (!songExists)
-        return;
+    if (!songExists) return;
 
     if (missInstaKill) {
         health = PlayState.opponentMode ? 2 : 0;
@@ -95,12 +88,10 @@ function onPlayerMiss(e) {
 }
 
 function onEvent(e) {
-    if (!songExists)
-        return;
+    if (!songExists) return;
 
     if (e.event.name == 'Scroll Speed Change' && scrollType == 'constant') {
         e.cancel();
-        // Cancel any existing tween
         if (eventsTween.get('scrollSpeedTween') != null) {
             eventsTween.get('scrollSpeedTween').cancel();
         }

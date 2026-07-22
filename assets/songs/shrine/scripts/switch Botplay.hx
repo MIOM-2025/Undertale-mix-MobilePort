@@ -34,34 +34,38 @@ var targetSwitchState:Bool = false;
 var countdownEnded:Bool = false;
 var rectClicked:Bool = false;
 
-// ===== Botplay 检测 =====
-public var isBotPlay:Bool = false;
+// ===== Botplay 检测（通过歌曲存档字段 shrine_botplay）=====
+public var isBotPlay:Bool = false;   // 新增全局变量
 
-// ===== Middle Scroll 偏移量 =====
+// ===== 切换延迟（毫秒） =====
+var switchDelayMs:Int = 1000;
+
+// ===== 倒计时水平偏移量（受 MiddleScroll 控制）=====
 var extraOffset:Int = 108;
 
-// ===== 允许下一次倒计时 =====
-var allowNextCountdown:Bool = true;
-
-// ===== 实时检测开关和冷却 =====
-var realTimeCheckEnabled:Bool = true;   // 是否允许实时检测
-var cooldownTimer:FlxTimer = null;      // 冷却定时器
-
 function postCreate() {
-	// 读取 Botplay
+	// ----- 读取当前歌曲的 Botplay 开关 -----
 	try {
 		isBotPlay = Reflect.field(FlxG.save.data, 'shrine_botplay') == true;
 	} catch (e:Dynamic) {
 		isBotPlay = false;
 	}
-	if (isBotPlay) return;
 
-	if (!FlxG.save.data.shrine_mechanics_allowed) return;
+	// 非 Botplay 模式直接返回，不初始化任何内容
+	if (!isBotPlay) return;
 
-	// 根据 Middle Scroll 设置偏移
+	if (!FlxG.save.data.shrine_mechanics_allowed) {
+		return;
+	}
+
+	// ----- 根据 MiddleScroll 决定倒计时是否居中 -----
 	var middleScroll = FlxG.save.data.middleScroll == true;
 	extraOffset = middleScroll ? 0 : 108;
 
+	if (!playerStrums.cpu) {
+		// 原有注释代码（可忽略）
+	}
+	
 	FlxG.cameras.add(switchCamera, false);
 	switchCamera.bgColor = FlxColor.TRANSPARENT;
 	switchCamera.zoom = 3;
@@ -96,7 +100,7 @@ function postCreate() {
 	keyString = CoolUtil.keyToString(switchKey);
 	trace(keyString);
 
-	// 触摸图片
+	// ----- 创建触摸切换图片（SP.png）-----
 	touchCamera = new FlxCamera();
 	touchCamera.bgColor = FlxColor.TRANSPARENT;
 	touchCamera.zoom = 1;
@@ -116,20 +120,14 @@ function postCreate() {
 	rectTargetY = FlxG.height - touchRect.height;
 	touchRect.visible = false;
 	add(touchRect);
-
-	// 默认启用实时检测
-	realTimeCheckEnabled = true;
 }
 
 // ----- 工具函数 -----
 function getNextNoteTimeOfColor(color:Bool):Float {
-	if (isBotPlay) return 0;
+	if (!isBotPlay) return 0;  // 安全起见
 	var lookingFor = color ? 'Blue Side Note' : 'Red Side Note';
-	var groupLength = playerStrums.notes.length - 1;
-	for (i in 0...groupLength) {
-		var id = groupLength - i;
-		var note = playerStrums.notes.members[id];
-		if (note != null && note.noteType == lookingFor) {
+	for (note in playerStrums.notes) {
+		if (note != null && note.noteType == lookingFor && note.strumTime > inst.time) {
 			return note.strumTime;
 		}
 	}
@@ -137,36 +135,32 @@ function getNextNoteTimeOfColor(color:Bool):Float {
 }
 
 function nextNoteTime() {
-	if (isBotPlay) return 0;
+	if (!isBotPlay) return 0;
 	var lookingFor = (switched ? 'Red Side Note' : 'Blue Side Note');
-	var groupLength = playerStrums.notes.length - 1;
-	for (i in 0...groupLength) {
-		var id = groupLength - i;
-		var note = playerStrums.notes.members[id];
-		if (note != null && note.noteType == lookingFor) {
-			return note.strumTime;
+	var closestTime:Float = Math.POSITIVE_INFINITY;
+	var found:Bool = false;
+	for (note in playerStrums.notes) {
+		if (note != null && note.noteType == lookingFor && note.strumTime > inst.time) {
+			if (note.strumTime < closestTime) {
+				closestTime = note.strumTime;
+				found = true;
+			}
 		}
 	}
-	return 0;
+	return found ? closestTime : 0;
 }
 
 function getNextSpecialNote():{time:Float, isBlue:Bool} {
-	if (isBotPlay) return null;
-	var groupLength = playerStrums.notes.length - 1;
+	if (!isBotPlay) return null;
 	var closestTime:Float = Math.POSITIVE_INFINITY;
 	var closestIsBlue:Bool = false;
 	var found:Bool = false;
-	var currentTime = inst.time;
-	for (i in 0...groupLength) {
-		var id = groupLength - i;
-		var note = playerStrums.notes.members[id];
+	for (note in playerStrums.notes) {
 		if (note != null && (note.noteType == 'Red Side Note' || note.noteType == 'Blue Side Note')) {
-			if (note.strumTime > currentTime + 0.001) {
-				if (note.strumTime < closestTime) {
-					closestTime = note.strumTime;
-					closestIsBlue = (note.noteType == 'Blue Side Note');
-					found = true;
-				}
+			if (note.strumTime > inst.time && note.strumTime < closestTime) {
+				closestTime = note.strumTime;
+				closestIsBlue = (note.noteType == 'Blue Side Note');
+				found = true;
 			}
 		}
 	}
@@ -175,12 +169,9 @@ function getNextSpecialNote():{time:Float, isBlue:Bool} {
 }
 
 function updateNoteVisibility() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	if (!FlxG.save.data.shrine_mechanics_allowed) return;
-	var groupLength = playerStrums.notes.length - 1;
-	for (i in 0...groupLength) {
-		var id = groupLength - i;
-		var note = playerStrums.notes.members[id];
+	for (note in playerStrums.notes) {
 		if (note != null) {
 			if (note.noteType == 'Red Side Note') { note.canBeHit = !switched; note.alpha = (switched ? 0.5 : 1); }
 			if (note.noteType == 'Blue Side Note') { note.canBeHit = switched; note.alpha = (switched ? 1 : 0.5); }
@@ -189,7 +180,7 @@ function updateNoteVisibility() {
 }
 
 function onNoteHit(e) {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	if (!FlxG.save.data.shrine_mechanics_allowed) return;
 	if (!e.note.strumLine.cpu) {
 		if (e.note.noteType == 'Red Side Note') {
@@ -219,9 +210,8 @@ var thresholdQuarter = switchThreshold / 4;
 var part:Int = 0;
 var playOnce = false;
 
-// ----- 上升 -----
 function startRise() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	if (!rectMoving && !rectRaised) {
 		touchRect.visible = true;
 		touchRect.alpha = 1;
@@ -238,9 +228,8 @@ function startRise() {
 	}
 }
 
-// ----- 下降（SP 落下）-----
 function startFall() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	if (!rectMoving && rectRaised) {
 		rectMoving = true;
 		FlxTween.tween(touchRect, {y: FlxG.height}, 0.4, {
@@ -249,24 +238,13 @@ function startFall() {
 				rectRaised = false;
 				rectMoving = false;
 				touchRect.visible = false;
-				// 下降完成后允许新的倒计时
-				allowNextCountdown = true;
-				playOnce = false;
-				countdownEnded = false;
 			}
 		});
 	}
 }
 
-// ----- 执行切换（玩家按 SP）-----
 function doSwitch() {
-	if (isBotPlay) return;
-	// 如果玩家主动切换，取消冷却定时器（不影响实时检测状态，但避免冲突）
-	if (cooldownTimer != null) {
-		cooldownTimer.cancel();
-		cooldownTimer = null;
-		// 无需重新启用 realTimeCheckEnabled，因为接下来会下降或保持
-	}
+	if (!isBotPlay) return;
 	if (!playerStrums.cpu && switchCamera.visible) {
 		if (part != 0) {
 			switchText.text = 'oh okay :(';
@@ -274,26 +252,13 @@ function doSwitch() {
 		switched = !switched;
 		updateSwitch();
 		if (rectRaised && !rectMoving) {
-			startFall();  // 下降并重置 allowNextCountdown
+			startFall();
 		}
 	}
 }
 
-// ----- 启动冷却（倒计时结束后禁用实时检测 1 秒）-----
-function startCooldown() {
-	if (cooldownTimer != null) {
-		cooldownTimer.cancel();
-		cooldownTimer = null;
-	}
-	realTimeCheckEnabled = false;   // 禁止实时检测
-	cooldownTimer = new FlxTimer().start(1.0, function(t) {
-		cooldownTimer = null;
-		realTimeCheckEnabled = true; // 恢复实时检测
-	});
-}
-
 function update() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	if (!FlxG.save.data.shrine_mechanics_allowed) return;
 	
 	if (timeText != null) {
@@ -302,12 +267,10 @@ function update() {
 		switchTimer.y = switchAlert.y - 30;
 	}
 
-	// 计算倒计时状态
 	timeLeft = trackedTime - inst.time;
 	countdownActive = (timeLeft > 0 && timeLeft < switchThreshold);
 	
-	// 显示/隐藏倒计时 UI
-	if (countdownActive && allowNextCountdown) {
+	if (countdownActive) {
 		switchCamera.alpha = 1;
 	} else {
 		if (switchCamera.alpha >= 1) {
@@ -317,11 +280,13 @@ function update() {
 		}
 	}
 	
-	// 倒计时逻辑（只在允许且活跃时）
-	if (countdownActive && allowNextCountdown) {
-		// 上升 SP
-		if (!rectMoving && !rectRaised) {
-			startRise();
+	if (countdownActive) {
+		if (!isBotPlay) {
+			if (!rectMoving && !rectRaised) {
+				startRise();
+			}
+		} else {
+			if (touchRect.visible) touchRect.visible = false;
 		}
 		
 		timeAlertPart = switchThreshold - (switchThreshold - timeLeft);
@@ -348,43 +313,38 @@ function update() {
 			}
 		}
 		
-		// 倒计时结束（part == 0）
 		if (part == 0 && !playOnce) {
 			FlxG.sound.play(Paths.sound('switchpull'));
-			if (playerStrums.cpu) {
-				// CPU 模式自动切换
+			if (isBotPlay) {
+				switched = !switched;
+				updateSwitch();
+				touchRect.visible = false;
+				rectRaised = false;
+				rectMoving = false;
+			} else if (playerStrums.cpu) {
 				switched = !switched;
 				updateSwitch();
 			}
 			playOnce = true;
 			countdownEnded = true;
-			// 禁止下一次倒计时，直到 SP 下降
-			allowNextCountdown = false;
 			oldPart = 4;
-			
-			// 启动冷却：禁用实时检测 1 秒
-			startCooldown();
 		}
 	} else {
-		// ----- 非倒计时状态：实时检测 -----
-		// 条件：SP 已升起、未在移动、实时检测开启
-		if (rectRaised && !rectMoving && realTimeCheckEnabled) {
-			var nextNote = getNextSpecialNote();
-			if (nextNote != null) {
-				// 如果当前颜色与下一个音符的颜色匹配（即不需要切换），则下降
-				if (switched == nextNote.isBlue) {
-					startFall(); // 下降，其 complete 中会重置 allowNextCountdown = true
+		if (!isBotPlay) {
+			if (rectRaised && !rectMoving) {
+				var nextNote = getNextSpecialNote();
+				if (nextNote != null) {
+					if (switched == nextNote.isBlue) {
+						startFall();
+					}
+				} else {
+					startFall();
 				}
-			} else {
-				// 没有后续特殊音符，也可以下降（结束提示），根据设计决定
-				// 这里保持原逻辑：下降
-				startFall();
 			}
 		}
 	}
 
-	// 触摸检测（点击 SP 图片）
-	if (rectRaised && !rectMoving && touchRect.visible && !rectClicked) {
+	if (!isBotPlay && rectRaised && !rectMoving && touchRect.visible && !rectClicked) {
 		for (touch in FlxG.touches.list) {
 			if (touch.justReleased) {
 				var touchPoint = touch.getWorldPosition(touchCamera);
@@ -398,8 +358,7 @@ function update() {
 		}
 	}
 
-	// 键盘/手柄切换
-	if (controls.getJustPressed('MECH_SWITCH') && !playerStrums.cpu && switchCamera.visible) {
+	if (!isBotPlay && controls.getJustPressed('MECH_SWITCH') && !playerStrums.cpu && switchCamera.visible) {
 		doSwitch();
 	}
 	
@@ -409,20 +368,20 @@ function update() {
 }
 
 function stepHit(curStep:Int) {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	if (!FlxG.save.data.shrine_mechanics_allowed) return;
 	updateTime();
 }
 
 function updateTime() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	playOnce = false;
-	trackedTime = nextNoteTime() - thresholdQuarter;
+	trackedTime = nextNoteTime() + switchDelayMs - switchThreshold;
 	if (timeText != null) { timeText.text = trackedTime; }
 }
 
 function updateSwitch() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	FlxG.sound.play(Paths.sound('snd_lightswitch'));
 	var color:FlxColor = (switched ? FlxColor.fromString('#00CCFF') : FlxColor.fromString('#FF0033'));
 	nSwitch.animation.play('s', true, !switched);
@@ -433,23 +392,24 @@ function updateSwitch() {
 	updateNoteVisibility();
 }
 
+// ----- 外部调用的位置重置函数 -----
 function strumChange() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
+	// 无论 MiddleScroll 状态，都强制居中（没有额外偏移）
 	for (t in [nSwitch, switchText, switchTimer]) {
 		t.screenCenter(FlxAxes.X);
 	}
 }
 
 function strumNormal() {
-	if (isBotPlay) return;
-	var middleScroll = FlxG.save.data.middleScroll == true;
-	extraOffset = middleScroll ? 0 : 108;
+	if (!isBotPlay) return;
+	// 根据当前 extraOffset 恢复位置（MiddleScroll 开启时 extraOffset = 0，即保持居中）
 	nSwitch.setPosition((nSwitch.x + 0.5) + extraOffset, nSwitch.y - 14.2);
 	switchText.setPosition(switchText.x + extraOffset, switchText.y);
 	switchTimer.setPosition(switchText.x, switchText.y + 15.2);
 }
 
 function okDone() {
-	if (isBotPlay) return;
+	if (!isBotPlay) return;
 	switchCamera.visible = false;
 }
