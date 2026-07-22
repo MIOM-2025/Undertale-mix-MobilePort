@@ -5,7 +5,7 @@
       "buttonIDs": ["P"],
       "graphic": "online_pause",
       "position": [1156, 2],
-      "color": "0xE5DE00"
+      "color": "0xFFFFFF"
     }
   ]
 }
