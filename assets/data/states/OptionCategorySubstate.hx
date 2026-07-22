@@ -129,6 +129,7 @@ function update(elapsed:Float) {
     backBtn.color = isHover ? FlxColor.YELLOW : FlxColor.WHITE;
     if (FlxG.mouse.justReleased && isHover) {
         FlxG.sound.play(Paths.sound('select'), Options.volumeSFX);
+        FunkinSave.flush(); // ★ 修复：退出前强制保存
         close();
         return;
     }
@@ -207,6 +208,7 @@ function update(elapsed:Float) {
                         if (categories[clickedOption].type == "checkbox") {
                             var checkbox:Checkbox = cast optionObjects[clickedOption].option;
                             checkbox.toggle();
+                            FunkinSave.flush(); // ★ 修复：复选框切换后立即保存
                         } else if (categories[clickedOption].type == "choice") {
                             // Choice 自己处理，这里不做干预
                         } else {
@@ -262,6 +264,11 @@ function update(elapsed:Float) {
                 }
             }
             isDragging = false;
+
+            // ★ 修复：滑条拖动结束后保存（如果当前选项是 slider）
+            if (categories[selected].type == "slider") {
+                FunkinSave.flush();
+            }
         }
     }
 
@@ -283,6 +290,7 @@ function update(elapsed:Float) {
                     }});
                 }
                 FlxTween.tween(timer, {x: 1}, categoryTransitionTime, {onComplete: function() {
+                    FunkinSave.flush(); // ★ 修复：退出前保存
                     close();
                 }});
                 data[0].descriptionCamera.visible = false;
@@ -328,7 +336,7 @@ function performAccept() {
     } else if (categories[selected].title == 'Reset Save Data') {
         FunkinSave.save.erase();
         FunkinSave.highscores.clear();
-        FunkinSave.flush();
+        FunkinSave.flush(); // ★ 修复：重置后立即保存
         FlxG.save.erase();
         FlxG.switchState(new ModState('ModTitle'));
     }
