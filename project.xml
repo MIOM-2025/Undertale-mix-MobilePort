@@ -8,7 +8,7 @@
 	<architecture exclude="arm64-v8a" if="ONLY_ARMV7" />
 
 	<app
-		title="UNDERTALE MIX" main="funkin.backend.system.Main"
+		title="Codename Engine Mobile" main="funkin.backend.system.Main"
 		file="CodenameEngine" packageName="com.undertale.mix.miom.mobileuiport"
 		package="com.undertale.mix.miom.mobileuiport"
 		version="1.0.1" company="Yoshman29" />
