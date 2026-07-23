@@ -1,0 +1,9 @@
+<!DOCTYPE codename-engine-character>
+<character antialiasing="false" camx="-140" camy="100" icon="mewmew" color="#FF8B90">
+	<anim name="idle" anim="mewmew idle" fps="8"/>
+	<anim name="singDOWN" anim="mewmew down" fps="8"/>
+	<anim name="singRIGHT" anim="mewmew right" fps="8"/>
+	<anim name="singLEFT" anim="mewmew left" fps="8"/>
+	<anim name="singUP" anim="mewmew up" fps="8"/>
+	<anim name="singUP-alt" anim="mewmew up0" fps="8"/>
+</character>

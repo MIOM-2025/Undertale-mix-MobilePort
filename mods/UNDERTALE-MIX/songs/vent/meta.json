@@ -1,0 +1,20 @@
+{
+	"customValues": {
+		"opponentColors": "3351B0",
+		"opponentIcons": "n",
+		"playerIcons": "frisk-n",
+		"playerColors": "3351B0"
+	},
+	"color": "#FFFFFF",
+	"opponentModeAllowed": true,
+	"icon": "",
+	"difficulties": [
+		"normal"
+	],
+	"coopAllowed": true,
+	"stepsPerBeat": 4,
+	"displayName": "Vents",
+	"needsVoices": true,
+	"beatsPerMeasure": 4,
+	"bpm": 135
+}

@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="howdybattle" antialiasing="false" camx="-150" camy="100">
+	<anim name="singDOWN" anim="down" fps="8"/>
+	<anim name="singRIGHT" anim="right" fps="8"/>
+	<anim name="singLEFT" anim="left" fps="8"/>
+	<anim name="singUP" anim="up" fps="8"/>
+	<anim name="idle" anim="dance" fps="8" loop="true"/>
+</character>

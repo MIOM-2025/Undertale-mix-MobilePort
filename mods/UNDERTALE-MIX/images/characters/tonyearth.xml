@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="tonyearth.png" width="177" height="203">
+	<SubTexture name="down0000" x="0" y="156" width="57" height="47" rotated="true" frameX="-0" frameY="-5" frameWidth="47" frameHeight="62"/>
+	<SubTexture name="down0001" x="0" y="63" width="58" height="46" rotated="true" frameX="-1" frameY="-4" frameWidth="47" frameHeight="62"/>
+	<SubTexture name="idle0000" x="117" y="140" width="56" height="44" rotated="true" frameX="-0" frameY="-6" frameWidth="45" frameHeight="62"/>
+	<SubTexture name="idle0001" x="59" y="139" width="57" height="42" rotated="true" frameX="-0" frameY="-5" frameWidth="45" frameHeight="62"/>
+	<SubTexture name="idle0002" x="100" y="0" width="42" height="58" frameX="-0" frameY="-4" frameWidth="45" frameHeight="62"/>
+	<SubTexture name="idle0003" x="59" y="62" width="58" height="42" rotated="true" frameX="-0" frameY="-4" frameWidth="45" frameHeight="62"/>
+	<SubTexture name="idle0004" x="0" y="110" width="58" height="45" rotated="true" frameX="-0" frameY="-4" frameWidth="45" frameHeight="62"/>
+	<SubTexture name="left0000" x="59" y="105" width="58" height="33" rotated="true" frameX="-0" frameY="-4" frameWidth="35" frameHeight="62"/>
+	<SubTexture name="left0001" x="143" y="0" width="34" height="58" frameX="-1" frameY="-4" frameWidth="35" frameHeight="62"/>
+	<SubTexture name="right0000" x="118" y="59" width="58" height="40" rotated="true" frameX="-1" frameY="-4" frameWidth="41" frameHeight="62"/>
+	<SubTexture name="right0001" x="118" y="100" width="58" height="39" rotated="true" frameX="-0" frameY="-4" frameWidth="41" frameHeight="62"/>
+	<SubTexture name="up0000" x="0" y="0" width="48" height="62" frameX="-0" frameY="-0" frameWidth="51" frameHeight="62"/>
+	<SubTexture name="up0001" x="49" y="0" width="50" height="61" frameX="-1" frameY="-1" frameWidth="51" frameHeight="62"/>
+</TextureAtlas>

@@ -1,0 +1,7 @@
+<!DOCTYPE codename-engine-stage>
+<stage folder="stages/deepersnowdin/" name="deepsnowdinpath" zoom = "4">
+	<sprite type="none" antialiasing="false" sprite="ms_stage" name="bg"/>
+	<sprite type="none" antialiasing="false" sprite="ms_stagetrees" name="trees"/>
+	<dad x = "220" y = "245"/>
+	<boyfriend x = "330" y = "228"/>
+</stage>

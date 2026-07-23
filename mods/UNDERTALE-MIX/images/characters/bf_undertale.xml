@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="bf_undertale.png" width="128" height="149">
+	<SubTexture name="down0000" x="0" y="125" width="24" height="24" frameX="-36" frameY="-42" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="down0001" x="103" y="123" width="23" height="25" frameX="-37" frameY="-41" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="down0002" x="103" y="123" width="23" height="25" frameX="-37" frameY="-41" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0000" x="26" y="61" width="26" height="30" frameX="-35" frameY="-36" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0001" x="26" y="61" width="26" height="30" frameX="-35" frameY="-36" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0002" x="26" y="61" width="26" height="30" frameX="-35" frameY="-36" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0003" x="26" y="61" width="26" height="30" frameX="-35" frameY="-36" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0004" x="26" y="34" width="28" height="26" frameX="-33" frameY="-40" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0005" x="51" y="93" width="26" height="26" frameX="-34" frameY="-40" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0006" x="53" y="63" width="26" height="29" frameX="-34" frameY="-37" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="idle0007" x="26" y="61" width="26" height="30" frameX="-35" frameY="-36" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="left0000" x="26" y="92" width="24" height="29" frameX="-34" frameY="-37" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="left0001" x="104" y="60" width="23" height="29" frameX="-35" frameY="-37" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="left0002" x="104" y="60" width="23" height="29" frameX="-35" frameY="-37" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="right0000" x="78" y="119" width="24" height="29" frameX="-40" frameY="-37" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="right0001" x="51" y="120" width="24" height="29" frameX="-39" frameY="-37" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="right0002" x="51" y="120" width="24" height="29" frameX="-39" frameY="-37" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="up0000" x="29" y="0" width="23" height="33" frameX="-37" frameY="-33" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="up0001" x="55" y="31" width="24" height="31" frameX="-37" frameY="-35" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="up0002" x="55" y="31" width="24" height="31" frameX="-37" frameY="-35" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="downmiss0000" x="0" y="125" width="24" height="24" frameX="-11" frameY="-17" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="downmiss0001" x="25" y="123" width="25" height="24" frameX="-11" frameY="-17" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="downmiss0002" x="78" y="93" width="25" height="25" frameX="-11" frameY="-16" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="hey0000" x="0" y="0" width="28" height="31" frameX="-9" frameY="-10" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="hey0001" x="80" y="60" width="23" height="29" frameX="-12" frameY="-12" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="hey0002" x="53" y="0" width="26" height="30" frameX="-10" frameY="-11" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="leftmiss0000" x="26" y="92" width="24" height="29" frameX="-9" frameY="-12" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="leftmiss0001" x="0" y="95" width="24" height="29" frameX="-10" frameY="-12" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="leftmiss0002" x="104" y="93" width="24" height="29" frameX="-11" frameY="-12" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="rightmiss0000" x="78" y="119" width="24" height="29" frameX="-15" frameY="-12" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="rightmiss0001" x="80" y="0" width="24" height="29" frameX="-14" frameY="-12" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="rightmiss0002" x="80" y="30" width="24" height="29" frameX="-13" frameY="-12" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="upmiss0000" x="29" y="0" width="23" height="33" frameX="-12" frameY="-8" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="upmiss0001" x="0" y="32" width="25" height="31" frameX="-12" frameY="-10" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="upmiss0002" x="0" y="64" width="25" height="30" frameX="-12" frameY="-11" frameWidth="50" frameHeight="50"/>
+</TextureAtlas>

@@ -1,0 +1,23 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="frontfacingrisk" antialiasing="false" flipX="true" camx="100" camy="100" isPlayer="true" icon="frisk-n" color="#3351B0">
+	<anim name="idle-up" anim="up0"/>
+	<anim name="singDOWN-up" anim="down_up"/>
+	<anim name="singRIGHT-up" anim="right_up"/>
+	<anim name="singLEFT-up" anim="left_up"/>
+	<anim name="singUP-up" anim="up_up"/>
+	<anim name="idle-left" anim="left0"/>
+	<anim name="singDOWN-left" anim="down_left"/>
+	<anim name="singRIGHT-left" anim="right_left"/>
+	<anim name="singLEFT-left" anim="left_left"/>
+	<anim name="singUP-left" anim="up_left"/>
+	<anim name="idle-down" anim="down0"/>
+	<anim name="singDOWN-down" anim="down_down"/>
+	<anim name="singRIGHT-down" anim="right_down"/>
+	<anim name="singLEFT-down" anim="left_down"/>
+	<anim name="singUP-down" anim="up_down"/>
+	<anim name="idle-right" anim="right0"/>
+	<anim name="singDOWN-right" anim="down_right"/>
+	<anim name="singRIGHT-right" anim="right_right"/>
+	<anim name="singLEFT-right" anim="left_right"/>
+	<anim name="singUP-right" anim="up_right"/>
+</character>

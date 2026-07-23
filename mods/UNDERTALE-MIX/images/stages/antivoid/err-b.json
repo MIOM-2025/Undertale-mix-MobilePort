@@ -1,0 +1,84 @@
+{ "frames": {
+   "white0000": {
+    "frame": { "x": 0, "y": 0, "w": 37, "h": 11 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 20, "w": 37, "h": 11 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   },
+   "white0001": {
+    "frame": { "x": 38, "y": 0, "w": 37, "h": 11 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 20, "w": 37, "h": 11 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   },
+   "white0002": {
+    "frame": { "x": 38, "y": 12, "w": 36, "h": 11 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 7, "y": 20, "w": 36, "h": 11 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   },
+   "white0003": {
+    "frame": { "x": 0, "y": 24, "w": 37, "h": 9 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 21, "w": 37, "h": 9 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   },
+   "black0000": {
+    "frame": { "x": 76, "y": 0, "w": 37, "h": 11 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 20, "w": 37, "h": 11 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   },
+   "black0001": {
+    "frame": { "x": 0, "y": 12, "w": 37, "h": 11 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 20, "w": 37, "h": 11 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   },
+   "black0002": {
+    "frame": { "x": 75, "y": 12, "w": 36, "h": 11 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 7, "y": 20, "w": 36, "h": 11 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   },
+   "black0003": {
+    "frame": { "x": 38, "y": 24, "w": 37, "h": 9 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 21, "w": 37, "h": 9 },
+    "sourceSize": { "w": 50, "h": 50 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.13-dev",
+  "image": "err-b.png",
+  "format": "RGBA8888",
+  "size": { "w": 113, "h": 33 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "white", "from": 0, "to": 3, "direction": "forward", "color": "#000000ff" },
+   { "name": "black", "from": 4, "to": 7, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

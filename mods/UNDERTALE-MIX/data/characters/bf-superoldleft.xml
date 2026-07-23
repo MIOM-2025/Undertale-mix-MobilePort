@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="bf_superold" antialiasing="false" flipX="true" camx="25" isPlayer="true" icon="bf-old" color="#31B1D1">
+	<anim name="idle" anim="idle0" x="0" y="0" fps="24" loop="false"/>
+	<anim name="singLEFT" anim="left" x="0" y="0" fps="24" loop="false"/>
+	<anim name="singDOWN" anim="down0" x="0" y="0" fps="24" loop="false"/>
+	<anim name="singUP" anim="up0" x="0" y="0" fps="24" loop="false"/>
+	<anim name="singRIGHT" anim="right0" x="0" y="0" fps="24" loop="false"/>
+</character>

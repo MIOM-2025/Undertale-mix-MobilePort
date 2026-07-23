@@ -1,0 +1,23 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="bfausreexport" antialiasing="false" flipX="true" camx="77" camy="75" isPlayer="true" icon="bf">
+	<anim name="singDOWN" anim="down0" fps="8"/>
+	<anim name="singRIGHT" anim="right0" fps="8"/>
+	<anim name="singLEFT" anim="left0" fps="8"/>
+	<anim name="singUP" anim="up0" fps="8"/>
+	<anim name="singLEFT-b3" anim="b3left" fps="8"/>
+	<anim name="singDOWN-ce" anim="cedown" x="3" y="-1" fps="8"/>
+	<anim name="singUP-csides" anim="csidesup" x="1" fps="8"/>
+	<anim name="singRIGHT-djx" anim="djxright" x="1" fps="8"/>
+	<anim name="singLEFT-bsides" anim="bsidesleft" fps="8"/>
+	<anim name="singDOWN-dsides" anim="dsidesdown" fps="8"/>
+	<anim name="idle-gsides" anim="gsidesidle" fps="8"/>
+	<anim name="singUP-arrowfunk" anim="arrowfunkup" x="1" fps="8"/>
+	<anim name="idle-corruption" anim="corruptionidle" fps="8"/>
+	<anim name="singRIGHT-hellbeats" anim="hellbeatsright" fps="8"/>
+	<anim name="idle-starcatcher" anim="starcatcheridle" x="-1" fps="8"/>
+	<anim name="idle" anim="idle" fps="8"/>
+	<anim name="singLEFTmiss" anim="leftmiss"/>
+	<anim name="singDOWNmiss" anim="downmiss"/>
+	<anim name="singUPmiss" anim="upmiss"/>
+	<anim name="singRIGHTmiss" anim="rightmis"/>
+</character>

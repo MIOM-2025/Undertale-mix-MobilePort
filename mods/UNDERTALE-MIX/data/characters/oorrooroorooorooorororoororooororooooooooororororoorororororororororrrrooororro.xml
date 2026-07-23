@@ -1,0 +1,8 @@
+<!DOCTYPE codename-engine-character>
+<character x="-200" y="-300" sprite="SONIC_X" scale="0.1" camx="-100" camy="80" icon="oorrooroorooorooorororoororooororooooooooororororoorororororororororrrrooororro" color="#000000">
+	<anim name="idle" anim="sonicX IDLE"/>
+	<anim name="singDOWN" anim="sonicx DOWN" y="-55"/>
+	<anim name="singRIGHT" anim="sonicx RIGHT"/>
+	<anim name="singLEFT" anim="sonicx LEFT" x="60" y="31"/>
+	<anim name="singUP" anim="sonicx UP" y="75"/>
+</character>

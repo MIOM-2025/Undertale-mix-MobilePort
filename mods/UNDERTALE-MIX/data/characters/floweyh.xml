@@ -1,0 +1,9 @@
+<!DOCTYPE codename-engine-character>
+<character antialiasing="false" camx="-170" camy="90" icon="flowey" color="#FFF200">
+	<anim name="singDOWN" anim="down" fps="8"/>
+	<anim name="singRIGHT" anim="right" fps="8"/>
+	<anim name="singLEFT" anim="left" fps="8"/>
+	<anim name="singUP" anim="up" fps="8"/>
+	<anim name="danceLeft" anim="danceLeft" fps="8"/>
+	<anim name="danceRight" anim="danceRight" fps="8"/>
+</character>

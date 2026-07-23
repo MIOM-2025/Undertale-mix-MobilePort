@@ -1,0 +1,197 @@
+{
+ "songs": [
+  {
+   "variationColor": "#FFFFFF",
+   "variationShort": "",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.5,
+     0.5
+    ],
+    "image": "flowey-h",
+    "offset": [
+     676,
+     640
+    ]
+   },
+   "displayName": "Howdy!",
+   "song": "howdy",
+   "background": "entrance",
+   "mechanics": false
+  },
+  {
+   "variationColor": "#FFFFFF",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variationShort": "",
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.3,
+     0.3
+    ],
+    "offset": [
+     832,
+     826
+    ],
+    "image": "chara-tr"
+   },
+   "displayName": "True Reset",
+   "song": "true-reset",
+   "background": "flowerbed",
+   "mechanics": false
+  },
+  {
+   "variationColor": "#FFFFFF",
+   "variationShort": "",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.45,
+     0.45
+    ],
+    "image": "mewmew",
+    "offset": [
+     612,
+     772
+    ]
+   },
+   "displayName": "Shrine",
+   "song": "shrine",
+   "background": "shrineswitch",
+   "mechanics": true
+  },
+  {
+   "variationColor": "#FFFFFF",
+   "variationShort": "",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.4,
+     0.4
+    ],
+    "image": "tony",
+    "offset": [
+     652,
+     720
+    ]
+   },
+   "displayName": "Temperate",
+   "song": "temperate",
+   "background": "dogroom",
+   "mechanics": false
+  },
+  {
+   "variationColor": "#FFFFFF",
+   "variationShort": "",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.38,
+     0.38
+    ],
+    "image": "parchment",
+    "offset": [
+     650,
+     698
+    ]
+   },
+   "displayName": "Parchment",
+   "song": "parchment",
+   "background": "deepersnowdinforest",
+   "mechanics": false
+  },
+  {
+   "variationColor": "#FFFFFF",
+   "variationShort": "",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.5,
+     0.5
+    ],
+    "image": "denug",
+    "offset": [
+     640,
+     822
+    ]
+   },
+   "displayName": "Debug",
+   "song": "debug",
+   "background": "waterfall",
+   "mechanics": false
+  },
+  {
+   "variationColor": "#FFFFFF",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variationShort": "",
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.4,
+     0.4
+    ],
+    "offset": [
+     662,
+     720
+    ],
+    "image": "vented"
+   },
+   "displayName": "Vents",
+   "song": "vent",
+   "background": "hotland",
+   "mechanics": false
+  },
+  {
+   "variationColor": "#FFFFFF",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variationShort": "",
+   "variation": "",
+   "renderInfo": {
+    "scale": [
+     0.35,
+     0.35
+    ],
+    "offset": [
+     633,
+     574
+    ],
+    "image": "error"
+   },
+   "displayName": "String Theory",
+   "song": "string-theory",
+   "background": "antivoid",
+   "mechanics": false
+  }
+ ],
+ "categoryName": "Band of Misfits"
+}

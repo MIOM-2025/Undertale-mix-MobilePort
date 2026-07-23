@@ -1,0 +1,19 @@
+{ 
+	"params": [
+		{
+			"name": "Force Camera",
+			"type": "Bool",
+			"defaultValue": false
+		},
+		{
+			"name": "X",
+			"type": "Int(-9999, 9999, 1)",
+			"defaultValue": 0
+		},
+		{
+			"name": "Y",
+			"type": "Int(-9999, 9999, 1)",
+			"defaultValue": 0
+		}
+	]
+}

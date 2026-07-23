@@ -1,0 +1,25 @@
+{ 
+	"params": [
+		{
+			"name": "Strumline",
+			"type": "StrumLine",
+			"defaultValue": 0
+		},
+		{
+			"name": "Strums",
+			"type": "String",
+			"defaultValue": ""
+		},
+		{
+			"name": "Scroll Speed",
+			"type": "Float(0, 9999, 1, 2)",
+			"defaultValue": 0
+		},
+		{
+			"name": "Reset To Default",
+			"type": "Bool",
+			"defaultValue": false
+			
+		}
+	] 
+}

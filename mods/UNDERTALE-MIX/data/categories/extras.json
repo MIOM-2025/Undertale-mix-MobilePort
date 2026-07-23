@@ -1,0 +1,53 @@
+{
+ "songs": [
+  {
+   "variationColor": "#FFFFFF",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variationShort": "v1",
+   "variation": "old and ugly",
+   "renderInfo": {
+    "scale": [
+     0.4,
+     0.4
+    ],
+    "offset": [
+     420,
+     438
+    ],
+    "image": "starch"
+   },
+   "displayName": "Parchment",
+   "song": "parchment-v1",
+   "background": "tilepuzzle",
+   "mechanics": false
+  },
+  {
+   "variationColor": "#E74C3C",
+   "backgroundOffset": [
+    -520,
+    -520
+   ],
+   "variationShort": "cm",
+   "variation": "champixed",
+   "renderInfo": {
+    "scale": [
+     0.35,
+     0.35
+    ],
+    "offset": [
+     700,
+     598
+    ],
+    "image": "joby"
+   },
+   "displayName": "Temperate",
+   "song": "temperate-cmix",
+   "background": "swirly",
+   "mechanics": false
+  }
+ ],
+ "categoryName": "extras"
+}

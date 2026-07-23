@@ -1,0 +1,5 @@
+<!DOCTYPE codename-engine-stage>
+<stage folder="stages/hill/" name="hill" zoom="3">
+	<dad x="600"/>
+	<boyfriend y="121"/>
+</stage>

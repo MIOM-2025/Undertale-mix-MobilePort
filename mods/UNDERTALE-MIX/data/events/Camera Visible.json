@@ -1,0 +1,9 @@
+{ 
+	"params": [
+		{
+			"name": "Camera",
+			"type": "DropDown('camGame', 'camHUD')",
+			"defaultValue": "camGame"
+		}
+	] 
+}

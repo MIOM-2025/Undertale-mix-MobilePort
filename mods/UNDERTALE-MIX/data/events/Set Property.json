@@ -1,0 +1,24 @@
+{ 
+	"params": [
+		{
+			"name": "Character(s)",
+			"type": "StrumLine",
+			"defaultValue": 0
+		},
+		{
+			"name": "Stage Object (Takes priority if not empty.)",
+			"type": "String",
+			"defaultValue": ""
+		},
+		{
+			"name": "Property",
+			"type": "String",
+			"defaultValue": ""
+		},
+		{
+			"name": "Value",
+			"type": "String",
+			"defaultValue": ""
+		}
+	] 
+}

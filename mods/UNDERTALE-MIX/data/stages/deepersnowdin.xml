@@ -1,0 +1,9 @@
+<stage zoom = "4.8" name = "deepersnowdin" folder = "stages/deepersnowdin/" startCamPosX = "570" startCamPosY = "-170">
+	<sprite name = "stage" x = "320" y = "-320" sprite = "p_stage" scroll = "1" antialiasing = "false"/>
+	<boyfriend x = "574" y = "-200"/>
+	<dad x = "475" y = "-215"/>
+	<sprite name = "tree0" x = "210" y = "-320" sprite = "foregroundtree" scrollx = "1.1" antialiasing = "false"/>
+	<sprite name = "tree1" x = "370" y = "-320" sprite = "foregroundtree" scrollx = "1.1" antialiasing = "false"/>
+	<sprite name = "tree2" x = "530" y = "-320" sprite = "foregroundtree" scrollx = "1.1" scrolly = "1" antialiasing = "false"/>
+	<sprite name = "tree3" x = "690" y = "-320" sprite = "foregroundtree" scrollx = "1.1" antialiasing = "false"/>
+</stage>

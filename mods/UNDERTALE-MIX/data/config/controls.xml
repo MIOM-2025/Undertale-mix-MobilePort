@@ -1,0 +1,5 @@
+<controls>
+    <category name="MOD SPECIFIC">
+        <control name="MECH_SWITCH" saveName="MECH_SWITCH" menuName="SWITCH" keyP1="SPACE" keyP2=""/>
+    </category>
+</controls>

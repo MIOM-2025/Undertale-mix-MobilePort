@@ -1,0 +1,24 @@
+{ 
+	"params": [
+		{
+			"name": "Player Icons",
+			"type": "String",
+			"defaultValue": ""
+		},
+		{
+			"name": "Opponent Icons",
+			"type": "String",
+			"defaultValue": ""
+		},
+		{
+			"name": "Player Bar Colors",
+			"type": "String",
+			"defaultValue": ""
+		},
+		{
+			"name": "Opponent Bar Colors",
+			"type": "String",
+			"defaultValue": ""
+		}
+	] 
+}

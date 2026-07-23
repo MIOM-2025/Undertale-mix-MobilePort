@@ -1,0 +1,9 @@
+{ 
+	"params": [
+		{
+			"name": "Stop Moving",
+			"type": "Bool",
+			"defaultValue": false
+		}
+	] 
+}

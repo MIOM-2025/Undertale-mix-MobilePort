@@ -1,0 +1,16 @@
+<stage zoom = "5" name = "antivoid-new" folder = "stages/antivoid/" startCamPosX = "455" startCamPosY = "-102">
+	<sprite name = "hall" sprite = "hall" x = "140" y = "0" antialiasing = "false" alpha = "1"/>
+	<boyfriend x = "960" y = "100"/>
+	<char name = "pico-stringedup" x = "867" y = "126"/>
+	<dad x = "849" y = "121"/>
+	<char name = "gf-stringedup" x = "809" y = "105"/>
+	<!-- <sprite name = "ref" sprite = "charposition" x = "140" y = "140" antialiasing = "false"/> -->
+	<sprite name = "pillar1" sprite = "pillar" x = "0" y = "0" antialiasing = "false" scrollx = "1.2"/>
+	<sprite name = "pillar2" sprite = "pillar" x = "120" y = "0" antialiasing = "false" scrollx = "1.2"/>
+	<sprite name = "pillar3" sprite = "pillar" x = "240" y = "0" antialiasing = "false" scrollx = "1.2"/>
+	<sprite name = "pillar4" sprite = "pillar" x = "360" y = "0" antialiasing = "false" scrollx = "1.2"/>
+	<sprite name = "pillar6" sprite = "pillar" x = "600" y = "0" antialiasing = "false" scrollx = "1.2"/>
+	<sprite name = "pillar7" sprite = "pillar" x = "700" y = "0" antialiasing = "false" scrollx = "1.2"/>
+	<sprite name = "pillar8" sprite = "pillar" x = "830" y = "0" antialiasing = "false" scrollx = "1.2"/>
+	<sprite name = "pillar9" sprite = "pillar" x = "1080" y = "0" antialiasing = "false" scrollx = "1.2"/>
+</stage>

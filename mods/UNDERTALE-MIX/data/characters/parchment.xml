@@ -1,0 +1,9 @@
+<!DOCTYPE codename-engine-character>
+<character antialiasing="false" camx="-140" camy="105" icon="parchment" color="#812833">
+	<anim name="idle" anim="idle0" fps="8"/>
+	<anim name="singLEFT" anim="left" fps="8"/>
+	<anim name="singDOWN" anim="down0" fps="8"/>
+	<anim name="singUP" anim="up0" fps="8"/>
+	<anim name="singRIGHT" anim="right0" fps="8"/>
+	<anim name="transformation" anim="anim0" x="-28" y="-34" fps="8"/>
+</character>

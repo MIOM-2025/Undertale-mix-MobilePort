@@ -1,0 +1,13 @@
+<!DOCTYPE codename-engine-character>
+<character sprite="bf_split" antialiasing="false" flipX="true" isPlayer="true" icon="bf" color="#30B0D1">
+	<anim name="idle" anim="idleleft0" fps="8"/>
+	<anim name="singDOWN" anim="downleft" fps="8"/>
+	<anim name="singRIGHT" anim="rightleft0" fps="8"/>
+	<anim name="singLEFT" anim="leftleft0" fps="8"/>
+	<anim name="singUP" anim="upleft0" fps="8"/>
+	<anim name="singLEFT-alt" anim="leftright0" fps="8"/>
+	<anim name="singDOWN-alt" anim="downright0" fps="8"/>
+	<anim name="idle-alt" anim="idleright0" fps="8"/>
+	<anim name="singRIGHT-alt" anim="rightright0"/>
+	<anim name="singUP-alt" anim="upright0" fps="8"/>
+</character>

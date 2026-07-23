@@ -1,0 +1,5 @@
+<stage zoom = "4" name = "dogshrine_switch" folder = "stages/dogshrine-switch/" startCamPosX = "0" startCamPosY = "0">
+	<sprite name = "shrine" x = "0" y = "0" sprite = "dogshrine" scroll = "1" antialiasing = "false"/>
+	<boyfriend x = "164" y = "55"/>
+	<dad x = "69" y = "61"/>
+</stage>

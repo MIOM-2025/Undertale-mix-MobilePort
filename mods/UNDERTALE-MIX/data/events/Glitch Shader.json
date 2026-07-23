@@ -1,0 +1,29 @@
+{ 
+	"params": [
+		{
+			"name": "Tween Intensity",
+			"type": "Bool",
+			"defaultValue": false
+		},
+		{
+			"name": "Tween Time",
+			"type": "Float(-1000, 1000, 1, 2)",
+			"defaultValue": 0.0
+		},
+		{
+			"name": "Remove Shader At Tween End",
+			"type": "Bool",
+			"defaultValue": false
+		},
+		{
+			"name": "Intensity",
+			"type": "Float(-1000, 1000, 1, 2)",
+			"defaultValue": 0.0
+		},
+		{
+			"name": "Disable Shader?",
+			"type": "Bool",
+			"defaultValue": false
+		}
+	] 
+}

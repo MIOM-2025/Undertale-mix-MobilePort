@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="cape.png" width="86" height="11">
+	<SubTexture name="cape0000" x="26" y="0" width="11" height="9" frameX="-18" frameY="-20" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="cape0001" x="50" y="0" width="12" height="10" frameX="-18" frameY="-20" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="cape0002" x="63" y="0" width="11" height="11" frameX="-18" frameY="-20" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="cape0003" x="75" y="0" width="11" height="11" frameX="-18" frameY="-20" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="cape0004" x="38" y="0" width="11" height="9" frameX="-18" frameY="-20" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="cape0005" x="13" y="0" width="12" height="8" frameX="-18" frameY="-19" frameWidth="50" frameHeight="50"/>
+	<SubTexture name="cape0006" x="0" y="0" width="12" height="6" frameX="-18" frameY="-20" frameWidth="50" frameHeight="50"/>
+</TextureAtlas>

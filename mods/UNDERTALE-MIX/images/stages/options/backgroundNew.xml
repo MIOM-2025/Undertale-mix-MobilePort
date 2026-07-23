@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="backgroundNew.png" width="1027" height="1799">
+	<SubTexture name="backgroundnew0000" x="0" y="0" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0001" x="0" y="225" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0002" x="0" y="450" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0003" x="0" y="675" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0004" x="0" y="900" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0005" x="0" y="1125" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0006" x="0" y="1350" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0007" x="0" y="1575" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0008" x="257" y="0" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0009" x="257" y="225" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0010" x="257" y="450" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0011" x="257" y="675" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0012" x="257" y="900" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0013" x="257" y="1125" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0014" x="257" y="1350" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0015" x="257" y="1575" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0016" x="514" y="0" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0017" x="514" y="225" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0018" x="514" y="450" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0019" x="514" y="675" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0020" x="514" y="900" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0021" x="514" y="1125" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0022" x="514" y="1350" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0023" x="514" y="1575" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0024" x="0" y="1125" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0025" x="771" y="0" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0026" x="771" y="225" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0027" x="771" y="450" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0028" x="771" y="675" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0029" x="257" y="450" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0030" x="257" y="675" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0031" x="771" y="900" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0032" x="771" y="1125" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0033" x="257" y="1350" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0034" x="257" y="1575" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0035" x="771" y="1350" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0036" x="514" y="225" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+	<SubTexture name="backgroundnew0037" x="771" y="1575" width="256" height="224" frameX="-0" frameY="-0" frameWidth="256" frameHeight="224"/>
+</TextureAtlas>

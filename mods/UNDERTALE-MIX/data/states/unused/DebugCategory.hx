@@ -1,0 +1,178 @@
+import UndertaleText;
+import flixel.addons.display.FlxBackdrop;
+import flixel.addons.display.FlxGridOverlay;
+import flixel.math.FlxRandom;
+import flixel.tweens.FlxEase;
+
+import optionsobjects.CheckboxOption;
+import optionsobjects.SliderOption;
+import optionsobjects.DropdownOption;
+import TypedBitmapText;
+
+var subCamera = new FlxCamera();
+var r = new FlxRandom();
+var descriptionBox:FlxSprite;
+var descriptionBackground:FlxSprite;
+var descriptionTyped:TypedBitmapText;
+var options = [
+	['c', 'Show Console', "hey dont forget to make a new/option type for this kinda thing"],
+	['c', 'Resizable Editors', "If checked, it allows the editors/to render beyond the game's/resolution."],
+	['c', 'Bypass Editor Resize', "If checked, it disables the minimum/resolution for resizing editors./(Option above needs to be checked.)"],
+	['c', 'Editor SFXs', "If checked, the editors will play/quirky little sound effects when/doing anything."],
+	['c', 'Chart Pretty Print', "If checked, saving a chart will have/it's contents formatted in a way/so that you can view them easily."],
+	['c', 'Character Pretty Print', "If checked, it does the same as the/option above, this one's just for/character files."],
+	['c', "Stage Pretty Print", "Same as the two above, this/one is just for stage files."],
+	['c', "Intensive Blur", "If checked, blurs will look/better but probably tank your/performance."],
+	['c', "Editor Autosave", "If checked, your files will autosave/on editors affected by whatever/you changed below."],
+	['s', 'Autosaving Time', "How often files will autosave/when on editor, reminding you that/you have this on."], 
+	['s', 'Autosave Warning Time', "How long the editor will/warn you that it's going to autosave./(In seconds, set to 0 to disable.)"],
+	['c', 'Autosave Folder', "Auto saved files will now appear/in the song's autosave folder/instead of overriding your file."],
+	['c', 'Offset In Charter', "If checked, the Song Offset option/will affect the chart editor too./"],
+	// ['c', 'Developer Mode', "If checked, it let's you access developer/specific keybinds, editors, options/and more."],
+	// ['c', 'Reset Save Data', "hey dont forget to make a new/option type for this kinda thing"],
+	// ['s', 'Framerate', '...'],
+	// ['c', 'Flashing Lights', 'If checked, any flashes or possibly/epliepsy triggering effects will/be reduced or removed.'],
+	// ['c', 'Colored Healthbar', "Sure, what the hell.      /If checked, the healthbar will be in/that retro base game look."],
+	// ['c', 'Pixel Perfect Render', "If checked, the game camera on songs/that use the Undertale style won't be/pixel perfect."],
+	// ['c', 'Skip Text Typing', "If checked...      /I'll just get to the point."],
+	// ['c', 'Downscroll', 'If checked, notes scroll down/instead of up.'],
+	// ['c', 'Ghost Tapping', "If checked, pressing a key when/there isn't a note will not/register as a miss."],
+	// ['c', 'Naughtyness', "If checked, any naughty things/will be censored."],
+	// ['c', 'Camera Zoom On Beat', "Pretty self explanatory.      /If checked, the camera will zoom in/when a certain beat is reached."],
+	// ['c', 'Auto Pause', "If checked the game will pause/when the window isn't focused."],
+	// ['s', 'Song Offset', "The amount of milliseconds the/song will be offset by./Use to mitigate audio delay."],
+	// ['s', 'Music Volume', "The volume of ingame audio."],
+	// ['s', 'SFX Volume', "The volume of ingame sound effects.      /Such as this typing sound effect."],
+];
+var curSelected:Int = 0;
+var optionObject:Array<Dynamic> = [
+];
+function create() {
+	FlxG.cameras.add(subCamera, false);
+	subCamera.bgColor = FlxColor.TRANSPARENT;
+	this.cameras = [subCamera];
+	// camera.zoom = 0.5;
+	
+	// var tile:FlxSprite = FlxGridOverlay.create(60, 60, 120, 120, true, r.color(), r.color());
+	// background = new FlxBackdrop(tile.pixels, FlxAxes.XY);
+	// background.alpha = 0;
+	// background.velocity.set(20, 20);
+	// background.scrollFactor.set(0, 0);
+	// add(background);
+	
+	// FlxTween.tween(background, {alpha: 0.5}, 0.2, {ease: FlxEase.cubeInOut});
+	
+	// var check:CheckboxOption = new CheckboxOption(68, 149, 'Downscroll', 'hi', this);
+	// add(check);
+	
+	var index:Int = 0;
+	var previousY:Int = 149;
+	for (option in options) {
+		if (option[0] == 'c') {
+			if (index != 0 && options[index - 1][0] == 's') {
+				previousY -= 38;
+			}
+			var check:CheckboxOption = new CheckboxOption(68, previousY + (index != 0 ? 80 : 0), option[1], option[2], this);
+			previousY = check.y;
+			check.ID = index;
+			optionObject.push(check);
+			add(check);
+		} else if (option[0] == 's') {
+			if (index != 0 && options[index - 1][0] == 'c') {
+				previousY += 60;
+			}
+			var slide:SliderOption = new SliderOption(84, previousY + (index != 0 ? 40 : 19), option[1], option[2], this);
+			previousY = slide.y;
+			slide.ID = index;
+			optionObject.push(slide);
+			add(slide);
+		} else if (option[0] == 'd') {
+			var dropdown:DropdownOption = new DropdownOption(100, previousY + (index != 0 ? 40 : 0), option[1], 'he', this, option[2]);
+			previousY = dropdown.y;
+			dropdown.ID = index;
+			optionObject.push(dropdown);
+			add(dropdown);
+		}
+		index++;
+	}
+	
+	descriptionBox = new FlxSprite(0, 492).makeGraphic(895, 215, FlxColor.WHITE);
+	descriptionBox.screenCenter(FlxAxes.X);
+	descriptionBox.scrollFactor.set(0, 0);
+	add(descriptionBox);
+	
+	descriptionBackground = new FlxSprite(0, 500).makeGraphic(880, 200, FlxColor.BLACK);
+	descriptionBackground.screenCenter(FlxAxes.X);
+	descriptionBackground.scrollFactor.set(0, 0);
+	add(descriptionBackground);
+	
+	description = new UndertaleText(descriptionBackground.x + 40, descriptionBackground.y + 30, '* hello', 'left', FlxG.width, 3, 'FFFFFF', 'undertale-pixel');
+	descriptionTyped = new TypedBitmapText(descriptionBackground.x + 32, descriptionBackground.y + 40, '* hi', description.getFont('undertale-pixel'));
+	descriptionTyped.setTextFormat(3, 'FFFFFF', description.getAlignment('left'), FlxG.width);
+	descriptionTyped.parentState = this;
+	descriptionTyped.scrollFactor.set(0, 0);
+	descriptionTyped.lineOffset = 1326;
+	descriptionTyped.lineSpacing = 50;
+	add(descriptionTyped);
+	
+	updateSelection(0);
+}
+
+function update(elapsed:Float) {
+	if (descriptionTyped != null) {
+		descriptionTyped.textUpdate(elapsed);
+	}
+	if (controls.UP_P) {
+		updateSelection(-1);
+	} else if (controls.DOWN_P) {
+		updateSelection(1);
+	} else if (controls.BACK) {
+		closeSubmenu();
+	}
+}
+
+function startTalking(text:String) {
+	descriptionTyped.resetAndChangeText(text, true);
+	descriptionTyped.startTyping(0.02, 'text-blip', true);
+}
+
+
+function closeSubmenu() {
+	showBox(false);
+	FlxTween.tween(subCamera, {alpha: 0}, 0.2, {ease: FlxEase.cubeInOut, onComplete: function() {
+		close();
+	}});
+}
+
+function updateSelection(?v:Int) {
+	if (v != null) {
+		FlxG.sound.play(Paths.sound('squeak'), 1);
+		curSelected += v;
+		if (curSelected < 0) {
+			curSelected = optionObject.length - 1;
+		} else if (curSelected > optionObject.length - 1) {
+			curSelected = 0;
+		}
+		if (curSelected > 2) {
+			subCamera.scroll.y = optionObject[curSelected].y - (options[curSelected][0] == 's' ? 350 : 285);
+		} else {
+			subCamera.scroll.y = 0;
+		}
+	}
+	for (option in optionObject) {
+		option.optionText.color = (option.ID == curSelected ? FlxColor.YELLOW : FlxColor.WHITE);
+		option.selected = option.ID == curSelected;
+	}
+	startTalking('* ' + options[curSelected][2]);
+}
+
+function showBox(show:Bool) {
+	for (thing in [descriptionBackground, descriptionBox, descriptionTyped]) {
+		thing.visible = show;
+	}
+	if (descriptionTyped.lines.length > 1) {
+		for (line in descriptionTyped.lines) {
+			line.visible = show;
+		}
+	}
+}
